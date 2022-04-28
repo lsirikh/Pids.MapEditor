@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Sections.TopMenuSectionView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1000">
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Column="0"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open"
+                          cal:Message.Attach="[Event Click]=[Action OnClickLoad($source, $eventArgs)]" />
+                <MenuItem Header="_Save"
+                          cal:Message.Attach="[Event Click]=[Action OnClickSave($source, $eventArgs)]" />
+                <Separator />
+                <MenuItem Header="_Exit"
+                          cal:Message.Attach="[Event Click]=[Action OnClickExit($source, $eventArgs)]" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Show List"
+                          cal:Message.Attach="[Event Click]=[Action OnClickShowList($source, $eventArgs)]" />
+                <MenuItem Header="Add _Map"
+                          cal:Message.Attach="[Event Click]=[Action OnClickAddMap($source, $eventArgs)]" />
+                <MenuItem Header="Add _Controller"
+                          cal:Message.Attach="[Event Click]=[Action OnClickAddController($source, $eventArgs)]" />
+                <MenuItem Header="Add _Sensor"
+                          cal:Message.Attach="[Event Click]=[Action OnClickAddSensor($source, $eventArgs)]" />
+                <MenuItem Header="Add _Group"
+                          cal:Message.Attach="[Event Click]=[Action OnClickAddGroup($source, $eventArgs)]" />
+                <MenuItem Header="Add Cam_era"
+                          cal:Message.Attach="[Event Click]=[Action OnClickAddCamera($source, $eventArgs)]" />
+            </MenuItem>
+            <MenuItem Header="_Drawing">
+            </MenuItem>
+            <MenuItem Header="_Help">
+            </MenuItem>
+
+        </Menu>
+        <GridSplitter Grid.Row="0"
+                      Grid.Column="0"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Stretch"
+                      Width="2"
+                      ShowsPreview="True"
+                      Background="Gray" />
+        <Menu Grid.Column="2"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
+            <MenuItem Header="Drawing Tool" Foreground="White" IsEnabled="False"/>
+            <MenuItem ToolTip="제어기"
+                      cal:Message.Attach="[Event Click]=[Action OnClickAddSymbolController($source, $eventArgs)]"
+                      IsEnabled="{Binding DrawingType
+                , UpdateSourceTrigger=PropertyChanged
+                , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='Controller'}">
+                <MenuItem.Header>
+                    <StackPanel Margin="5 2" VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <md:PackIcon Kind="Server"
+                                     Width="30" 
+                                     Height="30" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem ToolTip="센서"
+                      IsEnabled="{Binding DrawingType
+                , UpdateSourceTrigger=PropertyChanged
+                , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='Sensor'}">
+                <MenuItem.Header>
+                    <StackPanel Margin="5 2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <md:PackIcon Kind="BellRing"
+                                     Width="30"
+                                     Height="30" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem ToolTip="그룹"
+                      IsEnabled="{Binding DrawingType
+                , UpdateSourceTrigger=PropertyChanged
+                , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='Group'}">
+                <MenuItem.Header>
+                    <StackPanel Margin="5 2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <md:PackIcon Kind="SquareWave"
+                                     Width="30"
+                                     Height="30" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem ToolTip="카메라"
+                      IsEnabled="{Binding DrawingType
+                , UpdateSourceTrigger=PropertyChanged
+                , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='IpCamera'}">
+                <MenuItem.Header>
+                    <StackPanel Margin="5 2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <md:PackIcon Kind="Video"
+                                     Width="30"
+                                     Height="30" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</UserControl>

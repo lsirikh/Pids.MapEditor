@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.PopupDialogs.ProgressPopupDialogView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.PopupDialogs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+
+    <mah:ProgressRing Width="80"
+                      Height="80" />
+
+
+</UserControl>

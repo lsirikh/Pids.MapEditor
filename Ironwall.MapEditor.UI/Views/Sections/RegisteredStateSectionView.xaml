@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Sections.RegisteredStateSectionView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.Sections"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             mc:Ignorable="d">
+
+    <ScrollViewer VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <Grid x:Name="RegisteredState"
+              VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Header="Maps"
+                      Grid.Row="0"
+                      Grid.RowSpan="2"
+                      Grid.Column="0"
+                      Style="{StaticResource MaterialDesignCardGroupBox}"
+                      Margin="5"
+                      
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      md:ColorZoneAssist.Mode="Dark">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Map"
+                                         VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+                <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}"
+                              MaxHeight="500"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                    <!-- ContentControl-->
+                    <ContentControl cal:View.Model="{Binding MapTreeViewModel}" />
+                </ScrollViewer>
+            </GroupBox>
+            <GridSplitter Grid.Row="1"
+                          Grid.Column="0"
+                          Height="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Background="Gray" />
+            <GroupBox Header="Device"
+                      Grid.Row="2"
+                      Grid.Column="0"
+                      Grid.RowSpan="2"
+                      Style="{StaticResource MaterialDesignCardGroupBox}"
+                      Margin="5"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      md:ColorZoneAssist.Mode="Dark">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Devices"
+                                         VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+                <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}"
+                              MaxHeight="500"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <!-- ContentControl-->
+                    <ContentControl cal:View.Model="{Binding  DeviceTreeViewModel}" />
+                </ScrollViewer>
+            </GroupBox>
+            <GridSplitter Grid.Row="3"
+                          Grid.Column="0"
+                          Height="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Background="Gray" />
+            <GroupBox Header="Groups"
+                      Grid.Row="4"
+                      Grid.Column="0"
+                      Grid.RowSpan="2"
+                      Style="{StaticResource MaterialDesignCardGroupBox}"
+                      Margin="5"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      md:ColorZoneAssist.Mode="Dark">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="SquareWave"
+                                         VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+                <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}"
+                              MaxHeight="500"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <!-- ContentControl-->
+                    <ContentControl cal:View.Model="{Binding GroupTreeViewModel}" />
+                </ScrollViewer>
+            </GroupBox>
+            <GridSplitter Grid.Row="5"
+                          Grid.Column="0"
+                          Height="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Background="Gray" />
+            <GroupBox Header="Cameras"
+                      Grid.Row="6"
+                      Grid.Column="0"
+                      Grid.RowSpan="2"
+                      Style="{StaticResource MaterialDesignCardGroupBox}"
+                      Margin="5"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      md:ColorZoneAssist.Mode="Dark">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Video"
+                                         VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+                <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}"
+                              MaxHeight="500"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <!-- ContentControl-->
+                    <ContentControl cal:View.Model="{Binding CameraTreeViewModel}" />
+                </ScrollViewer>
+            </GroupBox>
+            <GridSplitter Grid.Row="7"
+                          Grid.Column="0"
+                          Height="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Background="Gray" />
+            
+        </Grid>
+
+
+
+    </ScrollViewer>
+    <!--
+    <Border md:ColorZoneAssist.Mode="Dark"
+            Background="#88000000"
+            Padding="5">
+    </Border>
+    -->
+</UserControl>

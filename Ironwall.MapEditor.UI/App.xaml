@@ -1,0 +1,101 @@
+﻿<Application x:Class="Ironwall.MapEditor.UI.App"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <local:UIBootstrapper x:Key="Bootstrapper" />
+                </ResourceDictionary>
+
+                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <!-- Theme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Steel.xaml" />
+
+                <!-- Material Design -->
+                <md:BundledTheme BaseTheme="Dark"
+                                 PrimaryColor="Blue"
+                                 SecondaryColor="Blue" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+
+                <!-- Dragablz Material Design -->
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml" />
+
+                <!--  FluentWPF Controls  -->
+                <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
+
+                <!-- Material Design Colors -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" />
+
+                <!-- Shared Styles -->
+                <!--
+                <ResourceDictionary Source="pack://application:,,,/Ironwall.Monitoring.UI;component/Themes/Generic.xaml" />
+                -->
+
+                <ResourceDictionary Source="Resources/ScrollBarStyle.xaml" />
+
+
+            </ResourceDictionary.MergedDictionaries>
+            <Color x:Key="SystemChromeAltMediumHighColor">#CCFFFFFF</Color>
+            <Color x:Key="SystemChromeAltHighColor">#FFFFFFFF</Color>
+            <FontFamily x:Key="NotoSansCJKkRRegular">NotoSansCJKkRRegular, pack://application:,,,/Resources/#Noto Sans CJK KR Regular</FontFamily>
+            <FontFamily x:Key="NotoSansCJKkRMedium">NotoSansCJKkRMedium, pack://application:,,,/Resources/#Noto Sans CJK KR Medium</FontFamily>
+
+            <sys:Double x:Key="HeightIconLarge">28</sys:Double>
+            <sys:Double x:Key="WidthIconLarge">28</sys:Double>
+            <sys:Double x:Key="HeightIconSmall">24</sys:Double>
+            <sys:Double x:Key="WidthIconSmall">24</sys:Double>
+
+
+            <!--Converters-->
+            <utils:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <utils:BoolToInverseVisibleConverter x:Key="BoolToInverseVisibleConverter" />
+            <utils:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <utils:StringToDateConverter x:Key="StringToDateConverter" />
+            <utils:LevelStringToIntConverter x:Key="LevelStringToIntConverter" />
+            <utils:LevelIndexConverter x:Key="LevelIndexConverter" />
+            <utils:UsedStringToIntConverter x:Key="UsedStringToIntConverter" />
+            <utils:UsedIndexConverter x:Key="UsedIndexConverter" />
+            <utils:ImageConverter x:Key="ImageConverter" />
+            <utils:MapImageConverter x:Key="MapImageConverter" />
+            <utils:TimeFormatConverter x:Key="TimeFormatConverter" />
+            <utils:AdminLevelAllowConverter x:Key="AdminLevelAllowConverter" />
+            <utils:UserLevelAllowConverter x:Key="UserLevelAllowConverter" />
+            <utils:NoImageNameConverter x:Key="NoImageNameConverter" />
+            <utils:IsDeletableAccountConverter x:Key="IsDeletableAccountConverter" />
+            <utils:AccountIndexNumberingConverter x:Key="AccountIndexNumberingConverter" />
+            <utils:AdminAllowedWIthIsItemExistMutliValueConverter x:Key="AdminAllowedWIthIsItemExistMutliValueConverter" />
+            <utils:PassConfirmValidationParameters x:Key="PassConfirmValidationParameters" />
+            <utils:TrueFalseToBooleanConverter x:Key="TrueFalseToBooleanConverter" />
+            <utils:EnumDeviceTypeToValueConverter x:Key="EnumDeivceTypeToValueConverter" />
+            <utils:TreeAddToBooleanConverter x:Key="TreeAddToBooleanConveter" />
+            <utils:EnumDeviceTypeToTextMultiValueConverter x:Key="EnumDeviceTypeToTextMultiValueConverter" />
+            <utils:EnumDeviceTypeToTextConverter x:Key="EnumDeviceTypeToTextConverter" />
+            <utils:EnumDataTypeToTextConverter x:Key="EnumDataTypeToTextConverter" />
+            <utils:EnumDeviceTypeToSensorAllowedConverter x:Key="EnumDeviceTypeToSensorAllowedConverter" />
+            <utils:EnumDeviceTypeToAllowedDeviceConverter x:Key="EnumDeviceTypeToAllowedDeviceConverter" />
+            <utils:TrueFalseToTextConverter x:Key="TrueFalseToTextConverter" />
+            <utils:EnumDrawingTypeToBooleanConverter x:Key="EnumDrawingTypeToBooleanConverter" />
+
+            <utilPass:PasswordBoxAssistant x:Key="PasswordBoxAssistant" />
+
+            <!--Validation Rules-->
+            <utils:IdValidationRule x:Key="IdValidationRule" />
+            <utils:NotEmptyValidationRule x:Key="NotEmptyValidationRule" />
+            <utils:PassConfirmValidationRule x:Key="PassConfirmValidationRule" />
+            <utils:StringLengthValidationRule x:Key="StringLengthValidationRule" />
+            <behavior:BindableSelectedItemBehavior x:Key="BindableSelectedItemBehavior" />
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

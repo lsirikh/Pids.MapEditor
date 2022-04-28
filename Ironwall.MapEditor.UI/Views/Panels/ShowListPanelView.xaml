@@ -1,0 +1,223 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Panels.ShowListPanelView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.Panels"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             mc:Ignorable="d"
+             FontFamily="{DynamicResource NotoSansCJKkRMedium}"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <md:DialogHost Identifier="ShowListPanel"
+                   DialogTheme="Dark"
+                   x:Name="DialogHost">
+
+        <md:Card x:Name="CardContents"
+                 md:ThemeAssist.Theme="Inherit"
+                 VerticalAlignment="Stretch"
+                 Opacity="0.95"
+                 MinWidth="350"
+                 MinHeight="500"
+                 Width="800"
+                 Height="600"
+                 Padding="20"
+                 UniformCornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <md:PackIcon Kind="ViewList"
+                                     Width="25"
+                                     Height="25"
+                                     VerticalAlignment="Center" />
+                        <TextBlock Margin="16 0 0 0"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Text="등록 정보 리스트">
+                        </TextBlock>
+                    </StackPanel>
+
+                </StackPanel>
+                <Separator Grid.Row="1"
+                           Margin="0 10"
+                           Style="{StaticResource MaterialDesignLightSeparator}" />
+
+                <TabControl Grid.Row="2"
+                            Background="{Binding ElementName=CardContents, Path=Background}"
+                            Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                            TabStripPlacement="Top"
+                            SelectedItem="{Binding SelectedItem}"
+                            HorizontalContentAlignment="Stretch"
+                            md:ColorZoneAssist.Mode="Dark"
+                            md:ShadowAssist.ShadowDepth="Depth2">
+                    <!--
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <cal:ActionMessage MethodName="OnLoadedItemList">
+                                <cal:Parameter Value="$source" />
+                                <cal:Parameter Value="$eventArgs" />
+                            </cal:ActionMessage>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    -->
+
+                    <TabItem Tag="Map">
+                        
+                        <TabItem.Header>
+                            <StackPanel Width="auto"
+                                        Height="auto">
+                                <md:PackIcon Width="24"
+                                             Height="24"
+                                             HorizontalAlignment="Center"
+                                             Kind="Map" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0"
+                                           TextAlignment="Center"
+                                           Text="맵" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <!-- Content -->
+                        <ContentControl Margin="0 5"
+                                        HorizontalAlignment="Stretch"
+                                        cal:View.Model="{Binding DataGridMapViewModel, UpdateSourceTrigger=PropertyChanged}"
+                                        />
+                    </TabItem>
+                    <TabItem Tag="Controller">
+                       
+                        <TabItem.Header>
+                            <StackPanel Width="auto"
+                                        Height="auto">
+                                <md:PackIcon Width="24"
+                                             Height="24"
+                                             HorizontalAlignment="Center"
+                                             Kind="Server" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0"
+                                           TextAlignment="Center"
+                                           Text="제어기" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <!-- Content -->
+                        <ContentControl Margin="0 5"
+                                        HorizontalAlignment="Stretch"
+                                        cal:View.Model="{Binding DataGridControllerViewModel, UpdateSourceTrigger=PropertyChanged}"
+                                        />
+                    </TabItem>
+                    <TabItem Tag="Sensor">
+                        <TabItem.Header>
+                            <StackPanel Width="auto"
+                                        Height="auto">
+                                <md:PackIcon Width="24"
+                                             Height="24"
+                                             HorizontalAlignment="Center"
+                                             Kind="Bell" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0"
+                                           TextAlignment="Center"
+                                           Text="센서" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <!-- Content -->
+                        <ContentControl Margin="0 5"
+                                        HorizontalAlignment="Stretch"
+                                        cal:View.Model="{Binding DataGridSensorViewModel, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </TabItem>
+                    <TabItem Tag="Group">
+                        <TabItem.Header>
+                            <StackPanel Width="auto"
+                                        Height="auto">
+                                <md:PackIcon Width="24"
+                                             Height="24"
+                                             HorizontalAlignment="Center"
+                                             Kind="SquareWave" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0"
+                                           TextAlignment="Center"
+                                           Text="그룹" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <!-- Content -->
+                        <ContentControl Margin="0 5"
+                                        HorizontalAlignment="Stretch"
+                                        cal:View.Model="{Binding DataGridGroupViewModel, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </TabItem>
+                    <TabItem Tag="Camera">
+                        <TabItem.Header>
+                            <StackPanel Width="auto"
+                                        Height="auto"
+                                        >
+                                <md:PackIcon Width="24"
+                                             Height="24"
+                                             HorizontalAlignment="Center"
+                                             Kind="Video" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           Margin="0"
+                                           TextAlignment="Center"
+                                           Text="카메라" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <!-- Content -->
+                        <ContentControl Margin="0 5"
+                                        HorizontalAlignment="Stretch"
+                                        cal:View.Model="{Binding DataGridCameraViewModel, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </TabItem>
+                </TabControl>
+
+                <Separator Margin="0 10"
+                           Grid.Row="3"
+                           Style="{StaticResource MaterialDesignLightSeparator}" />
+
+                <!-- Button Group -->
+                <Grid Grid.Row="4"
+                      VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            x:Name="ClickOkAsync"
+                            Margin="10 0"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                            VerticalAlignment="Center">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="확인" />
+                        </Button.Content>
+                    </Button>
+                    <Button Grid.Column="1"
+                            x:Name="ClickCancelAsync"
+                            Margin="10 0"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                            VerticalAlignment="Center">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="취소" />
+                        </Button.Content>
+                    </Button>
+                </Grid>
+            </Grid>
+        </md:Card>
+    </md:DialogHost>
+</UserControl>

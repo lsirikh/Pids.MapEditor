@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Panels.AddControllerPanelView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.Panels"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:enums="clr-namespace:Ironwall.Enums;assembly=Ironwall.Enums"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             mc:Ignorable="d"
+             FontFamily="{DynamicResource NotoSansCJKkRMedium}">
+
+    <md:DialogHost Identifier="AddControllerPanel"
+                   DialogTheme="Dark"
+                   x:Name="DialogHost">
+
+        <md:Card x:Name="CardContents"
+                 md:ThemeAssist.Theme="Inherit"
+                 VerticalAlignment="Stretch"
+                 Opacity="0.95"
+                 MinWidth="350"
+                 MinHeight="500"
+                 Width="450"
+                 Height="530"
+                 Padding="20"
+                 UniformCornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <md:PackIcon Kind="Server"
+                                     Width="25"
+                                     Height="25"
+                                     VerticalAlignment="Center" />
+                        <TextBlock Margin="16 0 0 0"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Text="제어기 등록하기">
+                        </TextBlock>
+                    </StackPanel>
+
+                </StackPanel>
+                <Separator Grid.Row="1"
+                           Margin="0 10"
+                           Style="{StaticResource MaterialDesignLightSeparator}" />
+                <ScrollViewer Grid.Row="2"
+                              Height="350"
+                              VerticalScrollBarVisibility="Auto">
+                    <ContentControl Margin="5 0"
+                                    cal:View.Model="{Binding ContentControlViewModel}" />
+
+                </ScrollViewer>
+
+                <Separator Margin="0 10"
+                           Grid.Row="3"
+                           Style="{StaticResource MaterialDesignLightSeparator}" />
+
+                <!-- Button Group -->
+                <Grid Grid.Row="4"
+                      VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            x:Name="ClickOkAsync"
+                            Margin="10 0"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                            VerticalAlignment="Center">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="확인" />
+                        </Button.Content>
+                    </Button>
+                    <Button Grid.Column="1"
+                            x:Name="ClickCancelAsync"
+                            Margin="10 0"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                            VerticalAlignment="Center">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="취소" />
+                        </Button.Content>
+                    </Button>
+                </Grid>
+            </Grid>
+        </md:Card>
+    </md:DialogHost>
+</UserControl>

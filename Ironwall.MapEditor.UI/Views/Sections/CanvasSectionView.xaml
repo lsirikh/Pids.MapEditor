@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Sections.CanvasSectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.Sections"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:enums="clr-namespace:Ironwall.Enums;assembly=Ironwall.Enums"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             FontFamily="{DynamicResource NotoSansCJKkRMedium}">
+    <Grid x:Name="CanvasSection">
+        <Viewbox x:Name="ViewBoxMap"
+                 
+                 >
+            <ContentPresenter x:Name="ViewBoxPresenter"
+                              cal:Message.Attach="[Event PreviewMouseDown] = [Action OnMouseClick($source, $eventArgs)];
+                              [Event MouseMove] = [Action OnMouseMove($source, $eventArgs)];"
+                              >
+                <ContentPresenter.Content>
+
+                    <Grid>
+                        <ContentControl cal:View.Model="{Binding CanvasMapViewModel, UpdateSourceTrigger=PropertyChanged}"
+                                        />
+                        <ContentControl cal:View.Model="{Binding CanvasControllerViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasControllerViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+                        <!--
+                                        Visibility="{Binding CanvasMapViewModel.EntityProvider.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                        <ContentControl cal:View.Model="{Binding CanvasGroupFaultViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasGroupFaultViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+
+                        <ContentControl cal:View.Model="{Binding CanvasCameraViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasCameraViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+
+                        <ContentControl cal:View.Model="{Binding CanvasGroupDetectViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasGroupDetectViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+
+                        <ContentControl cal:View.Model="{Binding CanvasSensorViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasSensorViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+
+                        <ContentControl cal:View.Model="{Binding CanvasGroupLabelViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasGroupLabelViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+                        -->
+                        <ContentControl 
+                            cal:View.Model="{Binding OnCanvasPreviewSymbolViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding OnCanvasPreviewSymbolViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                </ContentPresenter.Content>
+            </ContentPresenter>
+        </Viewbox>
+
+    </Grid>
+</UserControl>

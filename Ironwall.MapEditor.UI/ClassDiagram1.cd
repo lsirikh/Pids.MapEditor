@@ -1,0 +1,902 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Ironwall.MapEditor.UI.App" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.UIBootstrapper" Collapsed="true">
+    <Position X="17.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UIBootstrapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.DataProviders.CameraProvider" Collapsed="true">
+    <Position X="15.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProviders\CameraProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.DataProviders.ControllerProvider" Collapsed="true">
+    <Position X="17.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProviders\ControllerProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.DataProviders.GroupProvider" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProviders\GroupProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.DataProviders.MapProvider" Collapsed="true">
+    <Position X="27.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProviders\MapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.DataProviders.SensorProvider" Collapsed="true">
+    <Position X="27.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataProviders\SensorProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.Ui.Helpers.TreeManager" Collapsed="true">
+    <Position X="13.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAIAAAAAQQAAAAAIAAAAAAgAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Helpers\TreeManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.MapModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACAgAABAAAAAAAAAAAAUAAABAAAAAACAAAAABAAEA=</HashCode>
+      <FileName>Models\MapModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.SetupModel" Collapsed="true">
+    <Position X="17.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SetupModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.SymbolModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAARBAAAAEAAAADAEAAQIABAIAAEEAAgAAAAEA=</HashCode>
+      <FileName>Models\SymbolModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.TreeModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAKgAAAAAAAAAAQAAAAAAAAAAQAAAAAAAEA=</HashCode>
+      <FileName>Models\TreeModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Dialogs.CloseDialogMessageModel" Collapsed="true">
+    <Position X="24.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Dialogs\CloseDialogMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.ClosePanelMessageModel" Collapsed="true">
+    <Position X="26" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\ClosePanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenAddCameraPanelMessageModel" Collapsed="true">
+    <Position X="15.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenAddCameraPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenAddControlPanelMessageModel" Collapsed="true">
+    <Position X="17.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenAddControlPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenAddGroupPanelMessageModel" Collapsed="true">
+    <Position X="19" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenAddGroupPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenAddMapPanelMessageModel" Collapsed="true">
+    <Position X="20.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenAddMapPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenAddSensorPanelMessageModel" Collapsed="true">
+    <Position X="22.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenAddSensorPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenLoadPanelMessageModel" Collapsed="true">
+    <Position X="29.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenLoadPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenSavePanelMessageModel" Collapsed="true">
+    <Position X="15.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenSavePanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Panels.OpenShowListPanelMessageModel" Collapsed="true">
+    <Position X="19" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Panels\OpenShowListPanelMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.PopupDialogs.ClosePopupDialogMessageModel" Collapsed="true">
+    <Position X="27.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\PopupDialogs\ClosePopupDialogMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.PopupDialogs.OpenProgressPopupMessageModel" Collapsed="true">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\PopupDialogs\OpenProgressPopupMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.AddPanelUpdateMessageModel" Collapsed="true">
+    <Position X="26" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\AddPanelUpdateMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.ControllerContentUpdateMessageModel" Collapsed="true">
+    <Position X="15.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ContentUpdateMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.MapContentUpdateMessageModel" Collapsed="true">
+    <Position X="22.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ContentUpdateMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.SensorContentUpdateMessageModel" Collapsed="true">
+    <Position X="26" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ContentUpdateMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.SymbolContentUpdateMessageModel" Collapsed="true">
+    <Position X="24.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ContentUpdateMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.ControllerTreeAddMessageModel" Collapsed="true">
+    <Position X="19" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ControllerTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.ControllerTreeRemoveMessageModel" Collapsed="true">
+    <Position X="20.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\ControllerTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.MapTreeAddMessageModel" Collapsed="true">
+    <Position X="29.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\MapTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.MapTreeRemoveMessageModel" Collapsed="true">
+    <Position X="12" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\MapTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.SensorTreeAddMessageModel" Collapsed="true">
+    <Position X="29.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\SensorTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Process.SensorTreeRemoveMessageModel" Collapsed="true">
+    <Position X="12" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Process\SensorTreeMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Sections.OpenMapPropertyMessageModel" Collapsed="true">
+    <Position X="12" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Sections\OpenPropertyMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Sections.OpenControllerPropertyMessageModel" Collapsed="true">
+    <Position X="26" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Sections\OpenPropertyMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Sections.OpenSensorPropertyMessageModel" Collapsed="true">
+    <Position X="17.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Sections\OpenPropertyMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Sections.OpenGroupPropertyMessageModel" Collapsed="true">
+    <Position X="27.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Sections\OpenPropertyMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Models.Messages.Sections.OpenCameraPropertyMessageModel" Collapsed="true">
+    <Position X="24.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Messages\Sections\OpenPropertyMessageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ModelValidators.MapModelValidator" Collapsed="true">
+    <Position X="26" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelValidators\MapModelValidator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ModelValidators.SymbolModelValidator" Collapsed="true">
+    <Position X="27.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelValidators\SymbolModelValidator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Properties.Resources" Collapsed="true">
+    <Position X="19" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Properties.Settings" Collapsed="true">
+    <Position X="15.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Services.InsertTreeItemService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Services\InsertTreeItemService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Canvases.CanvasMapContentControlViewModel" Collapsed="true">
+    <Position X="19" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Canvases\CanvasMapContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Conductors.ConductorControlViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAABAAABAEAAAAA=</HashCode>
+      <FileName>ViewModels\Conductors\ConductorControlViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.BaseContentControl&lt;T&gt;" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAMICAAAAEACAAgEEAACIBAAAAAwAAAgIAABBIAA=</HashCode>
+      <FileName>ViewModels\ContentControls\BaseContentControl.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.CameraContentControlViewModel" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQCAAAARBAAAAEAAAADAEAAQIABAIwAEEAAgABAIEA=</HashCode>
+      <FileName>ViewModels\ContentControls\CameraContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.ControllerContentControlViewModel" Collapsed="true">
+    <Position X="9.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQCAAAARBAAAAEAAAADAEAAQIABAIQAEEAAgABAAEA=</HashCode>
+      <FileName>ViewModels\ContentControls\ControllerContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.GroupContentControlViewModel" Collapsed="true">
+    <Position X="12" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ContentControls\GroupContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.MapContentControlViewModel" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQCAgAABAAAAAAAAAAAAUAAABAAACQACAAAABBAAEA=</HashCode>
+      <FileName>ViewModels\ContentControls\MapContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.SensorContentControlViewModel" Collapsed="true">
+    <Position X="1.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ContentControls\SensorContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.SymbolContentControlViewModel" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQCAAAARBAAAAEAAAADAEAAQIABAIQAEEAAgABAAEA=</HashCode>
+      <FileName>ViewModels\ContentControls\SymbolContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.DataGridItems.DataGridCameraViewModel" Collapsed="true">
+    <Position X="26" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAICAAEAAABAAAAAAAAAAAAAAAAgQgI=</HashCode>
+      <FileName>ViewModels\DataGridItems\DataGridCameraViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.DataGridItems.DataGridControllerViewModel" Collapsed="true">
+    <Position X="29.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAICAAEAAABAAAAAAAAAAAAAAAAgQgI=</HashCode>
+      <FileName>ViewModels\DataGridItems\DataGridControllerViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.DataGridItems.DataGridGroupViewModel" Collapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAICAAEAAABAAAAAAAAAAAAAAAAgQgI=</HashCode>
+      <FileName>ViewModels\DataGridItems\DataGridGroupViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.DataGridItems.DataGridMapViewModel" Collapsed="true">
+    <Position X="17.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAICAAEAAABAAAAAAAAAAAAAABAgQgI=</HashCode>
+      <FileName>ViewModels\DataGridItems\DataGridMapViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.DataGridItems.DataGridSensorViewModel" Collapsed="true">
+    <Position X="20.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAICAAEAAABAAAAAAAAAAAAAAAAgQgI=</HashCode>
+      <FileName>ViewModels\DataGridItems\DataGridSensorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Dialogs.DialogShellViewModel" Collapsed="true">
+    <Position X="24.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Dialogs\DialogShellViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.ExShellViewModel" Collapsed="true">
+    <Position X="27.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgAAAAAAEAEAAAAAAAAAgAEAAAAAABAAA=</HashCode>
+      <FileName>ViewModels\ExShellViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.AddCameraPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQBBBAAkAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Panels\AddCameraPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.AddControllerPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAAQBBBgAEAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>ViewModels\Panels\AddControllerPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.AddGroupPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQBABAAkAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Panels\AddGroupPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.AddMapPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAAQBBBAAEAAAAAAAAAAAAAAAQAAAABAQA=</HashCode>
+      <FileName>ViewModels\Panels\AddMapPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.AddSensorPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAAAAQBBBAAkAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>ViewModels\Panels\AddSensorPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.LoadPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QCUEAAwAAAAAQBABAAEIAICEIAAAACACAAAAAEAAAQA=</HashCode>
+      <FileName>ViewModels\Panels\LoadPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.PanelShellViewModel" Collapsed="true">
+    <Position X="22.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Panels\PanelShellViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.SavePanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFEAAAAQACAAQBAJAAAAAAAEAAAxAAAAAAAAIAAAAQA=</HashCode>
+      <FileName>ViewModels\Panels\SavePanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Panels.ShowListPanelViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAQQBABAAEAAAAgAQAAAABAABAAAgABAAA=</HashCode>
+      <FileName>ViewModels\Panels\ShowListPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.PopupDialogs.PopupDialogShellViewModel" Collapsed="true">
+    <Position X="26" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\PopupDialogs\PopupDialogShellViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.PopupDialogs.ProgressPopupDialogViewModel" Collapsed="true">
+    <Position X="29.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\PopupDialogs\ProgressPopupDialogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.ControllerTreeViewModel" Collapsed="true">
+    <Position X="0.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAABAAAAAABAAAAAAAAAAKAAAAAAAAAgAAAAEAA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\ControllerTreeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.MapTreeViewModel" Collapsed="true">
+    <Position X="4" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAABAAAAAABAAAAAAAAAAKAAEAAAAAAgAAAAEAA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\MapTreeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.SensorTreeViewModel" Collapsed="true">
+    <Position X="7.5" Y="10" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAICAAABAAAAAABAAAAAAAAAAKAAAAAAAAAgAAAAEAA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\SensorTreeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.TreeBaseViewModel&lt;T&gt;" Collapsed="true">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAADACAACAAAAAEBAAAAgaAAEAAAABAgAAAAEAA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\TreeBaseViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.TreeContentControlViewModel" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQSAAAAAAKgAAAAAIAEQAQAAAgAAAQAAQAAAABAAEA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\TreeContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Sections.CanvasSectionViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAgIAAQAFABAAAAAAAAAABAAAAAIAAAAIAAAcAA=</HashCode>
+      <FileName>ViewModels\Sections\CanvasSectionViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Sections.PropertySectionViewModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAABAAAEAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Sections\PropertySectionViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Sections.RegisteredStateSectionViewModel" Collapsed="true">
+    <Position X="17.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAQAAAAAAAAAEAAAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Sections\RegisteredStateSectionViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.ViewModels.Sections.TopMenuSectionViewModel" Collapsed="true">
+    <Position X="12" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAGAAAAAAEEAAAAAAAAAAAAAACAAAAAgAAgAAAAAA=</HashCode>
+      <FileName>ViewModels\Sections\TopMenuSectionViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Canvases.CanvasMapContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Canvases\CanvasMapContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Conductors.ConductorControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Conductors\ConductorControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.CameraContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\CameraContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.ControllerContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\ControllerContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.GroupContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\GroupContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.MapContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\MapContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.SensorContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\SensorContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ContentControls.SymbolContentControlView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ContentControls\SymbolContentControlView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.DataGridItems.DataGridCameraView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\DataGridItems\DataGridCameraView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.DataGridItems.DataGridControllerView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\DataGridItems\DataGridControllerView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.DataGridItems.DataGridGroupView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\DataGridItems\DataGridGroupView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.DataGridItems.DataGridMapView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\DataGridItems\DataGridMapView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.DataGridItems.DataGridSensorView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\DataGridItems\DataGridSensorView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Dialogs.DialogShellView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Dialogs\DialogShellView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.ExShellView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ExShellView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.AddCameraPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\AddCameraPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.AddControllerPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\AddControllerPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.AddGroupPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\AddGroupPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.AddMapPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\AddMapPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.AddSensorPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\AddSensorPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.LoadPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\LoadPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.PanelShellView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\PanelShellView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.SavePanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\SavePanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Panels.ShowListPanelView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Panels\ShowListPanelView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.PopupDialogs.PopupDialogShellView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\PopupDialogs\PopupDialogShellView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.PopupDialogs.ProgressPopupDialogView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\PopupDialogs\ProgressPopupDialogView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.RegisteredItems.ControllerTreeView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\RegisteredItems\ControllerTreeView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.RegisteredItems.MapTreeView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\RegisteredItems\MapTreeView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.RegisteredItems.SensorTreeView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\RegisteredItems\SensorTreeView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Sections.CanvasSectionView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Sections\CanvasSectionView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Sections.PropertySectionView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Sections\PropertySectionView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Sections.RegisteredStateSectionView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Sections\RegisteredStateSectionView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ironwall.MapEditor.UI.Views.Sections.TopMenuSectionView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Sections\TopMenuSectionView.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="Ironwall.MapEditor.UI.Models.IMapModel" Collapsed="true">
+    <Position X="17.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACAgAABAAAAAAAAAAAAUAAABAAAAAACAAAAABAAEA=</HashCode>
+      <FileName>Models\IMapModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.Models.ITreeModel" Collapsed="true">
+    <Position X="22.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEACAAAAAAKgAAAAAAAAAAQAAAAAAAAAAQAAAAAAAEA=</HashCode>
+      <FileName>Models\ITreeModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.Services.IInsertTreeItemService" Collapsed="true">
+    <Position X="15.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Services\IInsertTreeItemService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.ViewModels.Conductors.IConductorControlViewModel" Collapsed="true">
+    <Position X="13.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAABAEAAAAA=</HashCode>
+      <FileName>ViewModels\Conductors\IConductorControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.ViewModels.ContentControls.IBaseContentControl&lt;T&gt;" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>ViewModels\ContentControls\IBaseContentControl.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.ViewModels.Panels.IPanelViewModel" Collapsed="true">
+    <Position X="19" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQBABAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Panels\IPanelViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ironwall.MapEditor.UI.ViewModels.RegisteredItems.ITreeContentControlViewModel" Collapsed="true">
+    <Position X="6.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\RegisteredItems\ITreeContentControlViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Malgun Gothic" Size="9" />
+</ClassDiagram>
