@@ -99,6 +99,8 @@ namespace Ironwall.MapEditor.UI
                 builder.RegisterType<CanvasMapEntityProvider>().SingleInstance();
 
                 builder.RegisterType<SymbolControllerProvider>().SingleInstance();
+                builder.RegisterType<SymbolSensorProvider>().SingleInstance();
+                builder.RegisterType<SymbolCameraProvider>().SingleInstance();
                 //builder.RegisterType<MapComboBox>().SingleInstance();
                 //builder.RegisterType<ControllerComboBox>().SingleInstance();
                 //builder.RegisterType<GroupComboBox>().SingleInstance();

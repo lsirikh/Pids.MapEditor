@@ -77,8 +77,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.ContentControls
             _eventAggregator = eventAggregator;
             _provider = provider;
 
-            broadCastring = true;
-            Update();
+            //broadCastring = false;
+            //Update();
         }
         #endregion
 

@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Symbols.SymbolSensorView"
+             xmlns:local="clr-namespace:Ironwall.MapEditor.UI.Views.Symbols"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:utils="clr-namespace:WPF.Utils;assembly=WPF.Utils"
+             xmlns:entities="clr-namespace:Ironwall.MapEditor.UI.Models"
+             xmlns:utilPass="clr-namespace:WPF.Utils.PasswordControl;assembly=WPF.Utils"
+             xmlns:enums="clr-namespace:Ironwall.Enums;assembly=Ironwall.Enums"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behavior="clr-namespace:WPF.Utils.Behaviors;assembly=WPF.Utils"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Viewbox Stretch="UniformToFill"
+             Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Viewbox.ToolTip>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0">
+                    <TextBlock.Text>
+                        <!-- MultiBinding 은 개별 Binding에 UpdateSourceTrigger가 불가능하다-->
+                        <MultiBinding StringFormat="{}제어기 {0}번&#10; 센서 {1}번">
+                            <Binding Path="IdController"
+                                     Mode="TwoWay"/>
+                            <Binding Path="IdSensor"
+                                     Mode="TwoWay"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Viewbox.ToolTip>
+        <Grid >
+            <Path x:Name="PathSymbol"
+                  Fill="Black"
+                  Stroke="Gold"
+                  StrokeThickness="3"
+                  Stretch="UniformToFill"
+                  Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                  Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                <Path.Style>
+                    <Style TargetType="Path">
+                        <!--
+                        <Setter Property="Visibility"
+                                Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFault, Mode=TwoWay}"
+                                         Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        -->
+                    </Style>
+                </Path.Style>
+                <Path.Data>
+                    <EllipseGeometry x:Name="EllipseGeometry"
+                                     RadiusX="1"
+                                     RadiusY="1" />
+                </Path.Data>
+            </Path>
+        </Grid>
+    </Viewbox>
+</UserControl>

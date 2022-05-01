@@ -19,7 +19,7 @@
 
     
         <Viewbox x:Name="SymbolController"
-             Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+             Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=LostFocus, Converter={StaticResource BooleanToVisibilityConverter}}"
              Stretch="UniformToFill">
             <Viewbox.ToolTip>
                 <Grid>
@@ -45,8 +45,8 @@
                 <Grid>
                     <md:PackIcon Kind="Network"
                                  Foreground="#FF00b0ff"
-                             Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                             Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
                         <md:PackIcon.Effect>
                             <DropShadowEffect ShadowDepth="2"
                                               Direction="330"
@@ -61,7 +61,7 @@
                                FontWeight="DemiBold"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
-                               Text="{Binding IdController, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                           Text="{Binding IdController, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
                 </Grid>
 
                 <!--

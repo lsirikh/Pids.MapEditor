@@ -110,41 +110,25 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         {
             if (SymbolContentControlViewModel == null)
                 return;
-            
-            //var vm = EntityViewModelFactory.Build<SymbolControllerViewModel>(SymbolContentControlViewModel.Model);
-
-
-            /*vm.EventAggregator = _eventAggregator;
-            vm.EventAggregator.SubscribeOnPublishedThread(vm);
-            vm.X = SymbolContentControlViewModel.X1;
-            vm.Y = SymbolContentControlViewModel.Y1;
-            vm.Visibility = SymbolContentControlViewModel.Visibility;
-
-            _symbolControllerProvider.Add(vm);*/
-
-            
-
-            /*if (_symbolControllerProvider.CollectionEntity.Where(t => t.Id == SymbolContentControlViewModel.Id).Count() > 0)
-            {
-                var entity = _symbolControllerProvider.CollectionEntity.Where(t => t.Id == SymbolContentControlViewModel.Id).FirstOrDefault();
-                DispatcherService.Invoke((System.Action)(() =>
-                {
-                    ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                    ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
-                    _symbolControllerProvider.Remove(entity);
-                }));
-            }
-            else
-                _symbolControllerProvider.Add(symbolController);*/
-
-            //_windowManager.ShowDialogAsync(_addMapPanelViewModel);
-            //_windowManager.ShowPopupAsync(_addMapPanelViewModel);
-
-            //_symbolControllerProvider.Add(SymbolContentControlViewModel);
-
 
             _eventAggregator.PublishOnUIThreadAsync(new OnActivePreviewSymbolMessageModel(SymbolContentControlViewModel));
             //_eventAggregator.PublishOnUIThreadAsync(new UpdateSymbolControllerMessageModel());
+        }
+
+        public void OnClickAddSymbolSensor(object sender, RoutedEventArgs e)
+        {
+            if (SymbolContentControlViewModel == null)
+                return;
+
+            _eventAggregator.PublishOnUIThreadAsync(new OnActivePreviewSymbolMessageModel(SymbolContentControlViewModel));
+        }
+
+        public void OnClickAddSymbolCamera(object sender, RoutedEventArgs e)
+        {
+            if (SymbolContentControlViewModel == null)
+                return;
+
+            _eventAggregator.PublishOnUIThreadAsync(new OnActivePreviewSymbolMessageModel(SymbolContentControlViewModel));
         }
 
         #endregion
@@ -160,7 +144,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         public Task HandleAsync(OpenMapPropertyMessageModel message, CancellationToken cancellationToken)
         {
 
-
             DrawingType = EnumDrawingType.NONE;
             return Task.CompletedTask;
         }
@@ -169,7 +152,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         {
             DrawingType = EnumDrawingType.Controller;
             SymbolContentControlViewModel = message.ViewModel as ControllerContentControlViewModel;
-
             
             return Task.CompletedTask;
         }
@@ -177,18 +159,21 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         public Task HandleAsync(OpenSensorPropertyMessageModel message, CancellationToken cancellationToken)
         {
             DrawingType = EnumDrawingType.Sensor;
+            SymbolContentControlViewModel = message.ViewModel as SensorContentControlViewModel;
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(OpenGroupPropertyMessageModel message, CancellationToken cancellationToken)
         {
             DrawingType = EnumDrawingType.Group;
+            SymbolContentControlViewModel = message.ViewModel as GroupContentControlViewModel;
             return Task.CompletedTask;
         }
         
         public Task HandleAsync(OpenCameraPropertyMessageModel message, CancellationToken cancellationToken)
         {
             DrawingType = EnumDrawingType.IpCamera;
+            SymbolContentControlViewModel = message.ViewModel as CameraContentControlViewModel;
             return Task.CompletedTask;
         }
         #endregion

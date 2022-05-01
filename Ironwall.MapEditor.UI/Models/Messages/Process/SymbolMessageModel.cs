@@ -9,4 +9,16 @@ namespace Ironwall.MapEditor.UI.Models.Messages.Process
     public class UpdateSymbolControllerMessageModel
     {
     }
+
+    public class UpdateSymbolSensorMessageModel
+    {
+    }
+
+    public class UpdateSymbolGroupMessageModel
+    {
+    }
+
+    public class UpdateSymbolCameraMessageModel
+    {
+    }
 }

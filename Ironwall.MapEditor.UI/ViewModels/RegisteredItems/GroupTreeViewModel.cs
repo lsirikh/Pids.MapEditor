@@ -19,17 +19,24 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 {
     public sealed class GroupTreeViewModel
         : TreeBaseViewModel<SymbolContentControlViewModel>
-        //, IHandle<GroupTreeAddMessageModel>
+        
         , IHandle<GroupTreeRemoveMessageModel>
         , IHandle<GroupContentUpdateMessageModel>
+
         , IHandle<ControllerContentRemoveMessageModel>
         , IHandle<ControllerTreeAddMessageModel>
         , IHandle<ControllerTreeRemoveMessageModel>
         , IHandle<ControllerContentUpdateMessageModel>
+
         , IHandle<SensorTreeAddMessageModel>
         , IHandle<SensorTreeRemoveMessageModel>
         , IHandle<SensorContentRemoveMessageModel>
         , IHandle<SensorContentUpdateMessageModel>
+
+        , IHandle<DeviceTreeSelectedMessageModel>
+        , IHandle<CameraTreeSelectedMessageModel>
+        //, IHandle<GroupTreeSelectedMessageModel>
+
         , IHandle<SymbolContentUpdateMessageModel>
     {
         #region - Ctors -
@@ -137,44 +144,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 }
             }
         }
-        /// <summary>
-        /// AddTree 메소드 - TreeNode를 추가하는 메소드로 재정의
-        /// </summary>
-        /// <param name="parentNode"></param>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        /*protected override bool AddTree(TreeContentControlViewModel parentNode, TreeContentControlViewModel node)
-        {
-            try
-            {
-                ///parentTree노드를 기준으로
-                ///하위에 childTree를 추가
-                if (parentNode == null)
-                {
-                    Items.Add(node);
-                }
-                else
-                {
-                    var tree = parentNode.Children;
-                    tree?.Add(node);
-                }
-
-                ///Tree 추가 node 활성화
-                if (!node.IsActive)
-                    node.ActivateAsync();
-
-                ///트리 갯수 갱신
-                TreeCount = TreeManager.GetTreeCount(Items);
-                Debug.WriteLine($"전체 트리갯수: {TreeCount}");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Raised Exception in AddTree : {ex.Message}");
-                return false;
-            }
-        }*/
-
 
         /// <summary>
         /// 선택된 트리 노드를 기준으로 변경사항 업데이트
@@ -190,7 +159,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 ///나머지 정보를 업데이트 해준다.
                 if (viewModel == null)
                     return;
-
 
                 var itemId = SetTreeNodeId(viewModel);
                 var dataType = DataConvertionHelper.IntDeviceToDataConverter(viewModel.TypeDevice);
@@ -225,6 +193,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                     item.Used = viewModel.Used;
                     item.Visibility = viewModel.Visibility;
 
+                    item.IsSelected = true;
+                    SelectedItem = item;
                 }
                 else if(dataType == EnumDataType.Sensor)
                 {
@@ -268,17 +238,18 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         item.Used = viewModel.Used;
                         item.Visibility = viewModel.Visibility;
                     }
+                    
+                    if(item != null)
+                    {
+                        item.IsSelected = true;
+                        SelectedItem = item;
+                    }
                 }
-
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Raised Exception in UpdateTree : {ex.Message}");
                 return;
-            }
-            finally
-            {
-                NotifyOfPropertyChange(() => Items);
             }
         }
         
@@ -371,85 +342,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             }
             base.RemoveTree(node);
         }
-        /*protected override void RemoveTree(TreeContentControlViewModel node)
-        {
-            ///자녀트리 삭제 처리
-            TreeManager.SetTreeClearChildrenWithProvidersInGroup(node.Children, _controllerProvider, _sensorProvider, _groupProvider);
-            
-            ///본인 트리 삭제 처리
-            ///1. 부모노드 식별
-            ///2. node의 타입 식별
-            ///3. 트리노드 삭제
-            ///4. provider 삭제 혹은 초기화
-            try
-            {
-                //1
-                var parentNode = node.ParentTree as TreeContentControlViewModel;
-
-                ///GroupRoot 트리 삭제
-                if (parentNode == null)
-                {
-                    Items.Remove(node);
-                }
-                else
-                {
-                    //2
-                    switch (node.DataType)
-                    {
-                        case EnumDataType.GroupRoot:
-                            ///parentNode가 null일 경우로 처리
-                            break;
-                        case EnumDataType.Group:
-                            ///Items로 부터 부모트리 할당
-                            var groupRoot = Items.FirstOrDefault();
-                            ///트리노드 삭제
-                            groupRoot.Children.Remove(node);
-
-                            ///트리노드에 해당하는 _groupProvider의 아이템을 찾는다.
-                            var item = _groupProvider.Where(t => t.Id == TreeManager.GetGroupProviderId(node.Id)).FirstOrDefault();
-                            ///_groupProvider에서 삭제
-                            _groupProvider.Remove(item);
-                            break;
-                        case EnumDataType.Controller:
-                            ///Items로 부터 GroupRoot를 할당
-                            var group = Items.FirstOrDefault() //GroupRoot
-                                .Children.Where(group => group.Id == parentNode.Id).FirstOrDefault(); //Group
-                            group.Children.Remove(node);
-
-                            ///Controller는 별도의 provider의 아이템 처리가 필요하지 않다.
-                            break;
-                        case EnumDataType.Sensor:
-                            ///NameArea를 _sensorProvider에서 찾는다.
-                            var searchedItem = _sensorProvider
-                                .Where(t => t.Id == TreeManager.GetSensorProviderId(node.Id)).FirstOrDefault();
-
-
-                            ///해당 NameArea를 갖는 Group에 속한 Controller를 찾는다.
-                            var controller = Items.FirstOrDefault() //GroupRoot
-                                .Children.Where(group => group.Name == searchedItem.NameArea).FirstOrDefault()//Group
-                                .Children.Where(con => con.Id == TreeManager.SetTreeControllerId(searchedItem.IdController)).FirstOrDefault();//Controller
-
-                            ///controller 트리에서 삭제
-                            controller.Children.Remove(node);
-                            ///_sensorProvidr 아이템 초기화
-                            searchedItem.NameArea = "Untitle";
-                            break;
-                        default:
-                            Debug.WriteLine($"아무것도 선택 되지 않았습니다.");
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Raised Exception at RemoveTree in GroupTree : {ex.Message}");
-            }
-            finally
-            {
-                node.DeactivateAsync(true);
-                node = null;
-            }
-        }*/
 
 
         /// <summary>
@@ -482,6 +374,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 if (viewModel != null)
                     _eventAggregator.PublishOnUIThreadAsync(new OpenSensorPropertyMessageModel(viewModel));
             }
+
+            _eventAggregator.PublishOnUIThreadAsync(new GroupTreeSelectedMessageModel());
         }
         #endregion
         #region - Binding Methods -
@@ -489,43 +383,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         #region - Processes -
         #endregion
         #region - IHanldes -
-        /*public Task HandleAsync(GroupTreeAddMessageModel message, CancellationToken cancellationToken)
-        {
-            //Get ViewModel
-            var viewModel = message.ViewModel;
-            //최대그룹번호+1의 값을 찾음
-            var id = _groupProvider.GetMaxId() + 1;
-            var nameArea = 0;
-            int.TryParse(ProviderManager.GetMaxNameArea(_groupProvider), out nameArea);
-            nameArea++;
-
-            //*************************GroupContentControlViewModel 생성, 활성화 및 추가****************************
-            var contentControlViewModel = new GroupContentControlViewModel(id, nameArea.ToString(), (int)EnumDeviceType.NONE, nameArea.ToString(), 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, false, false, _eventAggregator, _groupProvider, _mapProvider) { DisplayName = $"{id} {EnumDataType.Group.ToString()}" };
-            //MapContentControlViewModel 활성화
-            contentControlViewModel.ActivateAsync();
-            ///Provider에 데이터 추가
-            _groupProvider.Add(contentControlViewModel);
-            //************************************************************************************************************
-
-            ///초기화된 TreeContentControlViewModel인 경우
-            ///아래와 같이 TreeContetnControlViewModel과 GroupContentControlViewModel을
-            ///매칭하는 프로세스를 진행
-            if (viewModel.Id == TreeManager.SetTreeGroupId(0))
-            {
-                //트리 노드 중 최대 ID 값 보다 1증가한 값을 ID로 할당
-                viewModel.Id = TreeManager.SetTreeGroupId(id);
-                viewModel.Name = contentControlViewModel.NameArea;
-                viewModel.Description = contentControlViewModel.NameArea;
-                viewModel.DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{id} {EnumDataType.Group.ToString()}";
-            }
-            //AddTree Tree Node 추가 프로세스
-            AddTree(viewModel);
-
-            ///센서리스트 조회
-            AddGroupSubTree(viewModel);
-
-            return Task.CompletedTask;
-        }*/
+        
 
         private void AddGroupSubTree(TreeContentControlViewModel viewModel)
         {
@@ -686,6 +544,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(DeviceTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
+        }
+
+        public async Task HandleAsync(CameraTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
         }
         #endregion
 

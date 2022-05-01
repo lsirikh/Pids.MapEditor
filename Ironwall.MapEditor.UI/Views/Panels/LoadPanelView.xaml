@@ -67,6 +67,7 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="40" />
@@ -144,42 +145,60 @@
 
                         <TextBox Grid.Row="0"
                                  Grid.Column="2"
+                                 Grid.ColumnSpan="2"
                                  IsReadOnly="True"
+                                 ToolTip="{Binding MapData, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5 0"
                                  FontSize="15"
                                  VerticalAlignment="Center"
                                  Text="{Binding MapData, UpdateSourceTrigger=PropertyChanged, FallbackValue=F:\\workspace_app\\sensorway\\}" />
                         <TextBox Grid.Row="1"
                                  Grid.Column="2"
+                                 Grid.ColumnSpan="2"
                                  IsReadOnly="True"
+                                 ToolTip="{Binding ControllerData, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5 0"
                                  FontSize="15"
                                  VerticalAlignment="Center"
                                  Text="{Binding ControllerData, UpdateSourceTrigger=PropertyChanged, FallbackValue=F:\\workspace_app\\sensorway\\}" />
                         <TextBox Grid.Row="2"
                                  Grid.Column="2"
+                                 Grid.ColumnSpan="2"
                                  IsReadOnly="True"
+                                 ToolTip="{Binding SensorData, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5 0"
                                  FontSize="15"
                                  VerticalAlignment="Center"
                                  Text="{Binding SensorData, UpdateSourceTrigger=PropertyChanged, FallbackValue=F:\\workspace_app\\sensorway\\}" />
                         <TextBox Grid.Row="3"
                                  Grid.Column="2"
+                                 Grid.ColumnSpan="2"
                                  IsReadOnly="True"
+                                 ToolTip="{Binding GroupData, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5 0"
                                  FontSize="15"
                                  VerticalAlignment="Center"
                                  Text="{Binding GroupData, UpdateSourceTrigger=PropertyChanged, FallbackValue=F:\\workspace_app\\sensorway\\}" />
                         <TextBox Grid.Row="4"
                                  Grid.Column="2"
+                                 Grid.ColumnSpan="2"
                                  IsReadOnly="True"
+                                 ToolTip="{Binding CameraData, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5 0"
                                  FontSize="15"
                                  VerticalAlignment="Center"
                                  Text="{Binding CameraData, UpdateSourceTrigger=PropertyChanged, FallbackValue=F:\\workspace_app\\sensorway\\}" />
-                        
 
 
+                        <Button Grid.Row="6"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                Margin="10 0"
+                                Padding="5"
+                                FontSize="15"
+                                x:Name="ClickToLoadData"
+                                Content="열기" />
+                        <!--
                         <Button Grid.Row="0"
                                 Grid.Column="3"
                                 Margin="10 0"
@@ -219,6 +238,7 @@
                                 FontSize="15"
                                 x:Name="ClickToLoadCameraData"
                                 Content="열기" />
+                        -->
                     </Grid>
 
                 </ScrollViewer>

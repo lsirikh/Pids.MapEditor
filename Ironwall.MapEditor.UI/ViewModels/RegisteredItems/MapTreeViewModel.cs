@@ -39,7 +39,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         #region - Implementation of Interface -
         #endregion
         #region - Overrides -
-        
+
         /// <summary>
         /// Tree구조 전체 초기화 후, Root 등록
         /// </summary>
@@ -57,7 +57,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// <summary>
         /// 해당 Provider를 이용하여, 트리노드 Branch 혹은 Leaf 형성
         /// </summary>
-        protected override async void SetTreeWithProvider()
+        protected override void SetTreeWithProvider()
         {
             base.SetTreeWithProvider();
 
@@ -69,12 +69,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             itemList.ToList().ForEach(item => AddTree(item));
         }
 
-        public async void SelectOne()
+        public async Task SelectDefaultMapAsync()
         {
-            await Task.Run(async () => {
-                await Task.Delay(500);
-                SelectedItem = Items.FirstOrDefault().Children.FirstOrDefault();
+            var task = Task.Run(() =>
+            {
+                var SelectedMap = Items.FirstOrDefault().Children.FirstOrDefault();
+                SelectedMap.IsSelected = true;
+                SelectedItem = SelectedMap;
             });
+
+            await task;
         }
 
         /// <summary>
@@ -112,7 +116,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 return;
             }
         }
-        
+
         /// <summary>
         /// 트리 노드를 선택할 경우, 해당 아이템의 세부내역(PropertySection)을
         /// 활성화 시키기 위한 이벤트 호출 메소드
@@ -140,7 +144,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// <returns>Task.CompletedTask</returns>
         public Task HandleAsync(MapContentUpdateMessageModel message, CancellationToken cancellationToken)
         {
-            if(message?.ViewModel != null)
+            if (message?.ViewModel != null)
             {
                 UpdateTree(message.ViewModel);
             }
@@ -151,7 +155,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             return Task.CompletedTask;
         }
 
-        
+
         #endregion
         #region - Properties -
         #endregion

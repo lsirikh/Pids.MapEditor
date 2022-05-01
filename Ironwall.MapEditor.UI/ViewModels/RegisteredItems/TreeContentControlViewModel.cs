@@ -131,9 +131,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         var mapNumber = ProviderManager.GetMaxMapID(_mapProvider) + 1;
 
                         ///1
-                        var contentControlViewModel = new MapContentControlViewModel(id, $"{mapNumber}번 맵", mapNumber, null, null, null, 0.0, 0.0, false, false, _eventAggregator, _mapProvider) { DisplayName = $"{id} {EnumDataType.Map.ToString()}" };
+                        var contentControlViewModel = new MapContentControlViewModel(id, $"{mapNumber}번 맵", mapNumber, null, null, null, 0.0, 0.0, true, true, _eventAggregator, _mapProvider) { DisplayName = $"{id} {EnumDataType.Map.ToString()}" };
                         ///2
-                        await contentControlViewModel ?.ActivateAsync();
+                        await contentControlViewModel?.ActivateAsync();
                         ///3
                         _mapProvider?.Add(contentControlViewModel);
 
@@ -141,9 +141,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 
                         ///4
                         var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeMapId(id), contentControlViewModel.MapName, contentControlViewModel.Url, EnumTreeType.LEAF, true, true, viewModel, EnumDataType.Map, _eventAggregator, _mapProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Map.ToString()}" };
-                        
+
                         ///5
-                        await treeNode ?.ActivateAsync();
+                        await treeNode?.ActivateAsync();
 
                         ///6
                         viewModel.Children.Add(treeNode);
@@ -167,7 +167,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         var mapNumber = map != null ? map.MapNumber : 0;
 
                         //1
-                        var contentControlViewModel = new SensorContentControlViewModel(id, null, (int)EnumDeviceType.Fence, $"{idSensor}", idController, idSensor, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, mapNumber, false, false, _eventAggregator, _sensorProvider, _groupProvider, _controllerProvider, _mapProvider) { DisplayName = $"{idSensor} {EnumDataType.Sensor.ToString()}" };
+                        var contentControlViewModel = new SensorContentControlViewModel(id, null, (int)EnumDeviceType.Fence, $"{idSensor}", idController, idSensor, 0, 0.0, 0.0, 0.0, 0.0, 20.0, 20.0, 0.0, mapNumber, true, true, _eventAggregator, _sensorProvider, _groupProvider, _controllerProvider, _mapProvider) { DisplayName = $"{idSensor} {EnumDataType.Sensor.ToString()}" };
                         //2
                         await contentControlViewModel?.ActivateAsync();
                         ///3
@@ -180,8 +180,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         viewModel.Children.Add(treeNode);
 
                     }
-
-                    //await _eventAggregator?.PublishOnUIThreadAsync(new SensorTreeAddMessageModel(sensor));
                     break;
 
                 case EnumDataType.DeviceRoot:
@@ -200,7 +198,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         var mapNumber = map != null ? map.MapNumber : 0;
 
                         ///1 
-                        var contentControlViewModel = new ControllerContentControlViewModel(id, $"{idController}제어기", (int)EnumDeviceType.Controller, $"{idController}", idController, 0, 0, 0.0, 0.0, 0.0, 0.0, 30.0, 30.0, 0.0, mapNumber, false, false, _eventAggregator, _controllerProvider, _mapProvider) { DisplayName = $"{idController} {EnumDataType.Controller.ToString()}" };
+                        var contentControlViewModel = new ControllerContentControlViewModel(id, $"{idController}제어기", (int)EnumDeviceType.Controller, $"{idController}", idController, 0, 0, 0.0, 0.0, 0.0, 0.0, 40.0, 40.0, 0.0, mapNumber, true, true, _eventAggregator, _controllerProvider, _mapProvider) { DisplayName = $"{idController} {EnumDataType.Controller.ToString()}" };
                         ///2
                         await contentControlViewModel?.ActivateAsync();
                         ///3
@@ -225,13 +223,13 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                     ///6. TreeNode를 ControllerProvider에 등록
                     {
                         var id = _groupProvider.GetMaxId() + 1;
-                        var nameArea = int.Parse(ProviderManager.GetMaxNameArea(_groupProvider))+1;
+                        var nameArea = int.Parse(ProviderManager.GetMaxNameArea(_groupProvider)) + 1;
 
                         var map = _mapProvider.CollectionEntity?.FirstOrDefault();
                         var mapNumber = map != null ? map.MapNumber : 0;
 
                         //1
-                        var contentControlViewModel = new GroupContentControlViewModel(id, nameArea.ToString(), (int)EnumDeviceType.NONE, nameArea.ToString(), 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, mapNumber, false, false, _eventAggregator, _groupProvider, _mapProvider) { DisplayName = $"{id} {EnumDataType.Group.ToString()}" };
+                        var contentControlViewModel = new GroupContentControlViewModel(id, nameArea.ToString(), (int)EnumDeviceType.NONE, nameArea.ToString(), 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, mapNumber, true, true, _eventAggregator, _groupProvider, _mapProvider) { DisplayName = $"{id} {EnumDataType.Group.ToString()}" };
                         //2
                         await contentControlViewModel?.ActivateAsync();
                         ///3
@@ -261,14 +259,14 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         var mapNumber = map != null ? map.MapNumber : 0;
 
                         //1
-                        var contentControlViewModel = new CameraContentControlViewModel(id, $"{id}번 카메라", (int)EnumDeviceType.IpCamera, $"{id}번 카메라", 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 30.0, 30.0, 0.0, mapNumber, false, false, _eventAggregator, null, _mapProvider) { DisplayName = $"{id} {EnumDataType.Camera.ToString()}" };
+                        var contentControlViewModel = new CameraContentControlViewModel(id, $"{id}번 카메라", (int)EnumDeviceType.IpCamera, $"{id}번 카메라", 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 30.0, 30.0, 0.0, mapNumber, true, true, _eventAggregator, null, _mapProvider) { DisplayName = $"{id} {EnumDataType.Camera.ToString()}" };
                         //2
                         contentControlViewModel?.ActivateAsync();
                         ///3
                         _cameraProvider.Add(contentControlViewModel);
-                        
+
                         ///4
-                        var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeCameraId(id), contentControlViewModel.NameDevice, contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, viewModel, EnumDataType.Camera, _eventAggregator, _mapProvider, _cameraProvider){ DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Camera.ToString()}" };
+                        var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeCameraId(id), contentControlViewModel.NameDevice, contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, viewModel, EnumDataType.Camera, _eventAggregator, _mapProvider, _cameraProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Camera.ToString()}" };
                         ///5
                         await treeNode?.ActivateAsync();
                         ///6
@@ -315,99 +313,123 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                     }
                     break;
                 case EnumDataType.Controller:
-
-                    ///최상위 RootNode를 확인하고, GroupRoot와 DeviceRoot는
-                    ///서로 다르게 동작
-                    ///GroupRoot인 경우,
-                    ///ControllerTree 하위의 SensorTree의 그룹정보를 모두 Untitled로 변경,
-                    ///Controllertree 및 Children Tree 모두 삭제
-                    ///DeviceRoot인 경우,
-                    ///Controllertree 및 Children Tree 모두 삭제
-                    ///ControllerProvider 및 SensorProivder에서도 모두 삭제
-                    ///삭제 순서
-                    ///1. _controllerProvider에서 viewModel과 동일한 Id를 검색한 후,
-                    ///2. 해당 contentControlViewModel을 Remove
-                    ///3. 해당 contentControlViewModel을 Deactivate
-                    ///4. viewModel을 통해 부모 TreeNode를 parentNode로 할당
-                    ///5. 부모 TreeNode에서 해당 자식노드를 Remove
-                    ///6. 해당 TreeContentControlViewModel을 Deactivate
-
-                    var rootNode = TreeManager.GetRootNode(viewModel);
-                    
-                    if(rootNode.DataType == EnumDataType.DeviceRoot)
                     {
-                        //1
-                        var contentControlViewModel = _controllerProvider.Where(t => t.Id == TreeManager.GetControllerProviderId(viewModel.Id)).FirstOrDefault();
-                        //2
-                        await _eventAggregator.PublishOnUIThreadAsync(new ControllerContentRemoveMessageModel(contentControlViewModel));
-                        _controllerProvider.Remove(contentControlViewModel);
-                        //3
-                        await contentControlViewModel?.DeactivateAsync(true);
-                        //3-1 
-                        var sensorList = _sensorProvider.Where(t => t.IdController == TreeManager.GetControllerProviderId(viewModel.Id)).ToList();
-                        foreach (var item in sensorList)
+                        ///최상위 RootNode를 확인하고, GroupRoot와 DeviceRoot는
+                        ///서로 다르게 동작
+                        ///GroupRoot인 경우,
+                        ///ControllerTree 하위의 SensorTree의 그룹정보를 모두 Untitled로 변경,
+                        ///Controllertree 및 Children Tree 모두 삭제
+                        ///DeviceRoot인 경우,
+                        ///Controllertree 및 Children Tree 모두 삭제
+                        ///ControllerProvider 및 SensorProivder에서도 모두 삭제
+                        ///삭제 순서
+                        ///1. _controllerProvider에서 viewModel과 동일한 Id를 검색한 후,
+                        ///2. 해당 contentControlViewModel을 Remove
+                        ///3. 해당 contentControlViewModel을 Deactivate
+                        ///4. viewModel을 통해 부모 TreeNode를 parentNode로 할당
+                        ///5. 부모 TreeNode에서 해당 자식노드를 Remove
+                        ///6. 해당 TreeContentControlViewModel을 Deactivate
+                        ///7. SymbolControllerViewModel을 삭제
+                        var rootNode = TreeManager.GetRootNode(viewModel);
+
+                        if (rootNode.DataType == EnumDataType.DeviceRoot)
                         {
-                            _sensorProvider.Remove(item);
-                            await item.DeactivateAsync(true);
-                            await _eventAggregator.PublishOnUIThreadAsync(new SensorContentRemoveMessageModel(item));
+                            //1
+                            var contentControlViewModel = _controllerProvider.Where(t => t.Id == TreeManager.GetControllerProviderId(viewModel.Id)).FirstOrDefault();
+                            //2
+                            await _eventAggregator.PublishOnUIThreadAsync(new ControllerContentRemoveMessageModel(contentControlViewModel));
+                            _controllerProvider.Remove(contentControlViewModel);
+                            //3
+                            await contentControlViewModel?.DeactivateAsync(true);
+                            //3-1 
+                            var sensorList = _sensorProvider.Where(t => t.IdController == TreeManager.GetControllerProviderId(viewModel.Id)).ToList();
+                            foreach (var item in sensorList)
+                            {
+                                _sensorProvider.Remove(item);
+                                await item.DeactivateAsync(true);
+                                await _eventAggregator.PublishOnUIThreadAsync(new SensorContentRemoveMessageModel(item));
+                            }
+                            //4
+                            var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
+                            //5
+                            TreeManager.SetTreeClear(viewModel.Children);
+                            parentNode?.Children?.Remove(viewModel);
+                            //6
+                            await viewModel.DeactivateAsync(true);
+                            ///7
+                            var symbolProvider = IoC.Get<SymbolControllerProvider>();
+                            var symbol = symbolProvider?.CollectionEntity?.Where(t => t.Id == contentControlViewModel.Id)?.FirstOrDefault();
+                            if (symbol != null)
+                            {
+                                symbol.Deactivate();
+                                symbolProvider.Remove(symbol);
+                                symbol = null;
+                                _eventAggregator?.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
+                            }
                         }
-                        //4
-                        var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-                        //5
-                        TreeManager.SetTreeClear(viewModel.Children);
-                        parentNode?.Children?.Remove(viewModel);
-                        //6
-                        await viewModel.DeactivateAsync(true);
-                    }else if(rootNode.DataType == EnumDataType.GroupRoot)
-                    {
-                        _sensorProvider.Where(t => t.IdController == TreeManager.GetControllerProviderId(viewModel.Id)).Select(t => t.NameArea = null);
-                        //4
-                        var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-                        //5
-                        TreeManager.SetTreeClear(viewModel.Children);
-                        parentNode?.Children?.Remove(viewModel);
-                        //6
-                        await viewModel.DeactivateAsync(true);
+                        else if (rootNode.DataType == EnumDataType.GroupRoot)
+                        {
+                            
+                            //4
+                            var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
+                            //5
+                            TreeManager.SetTreeClear(viewModel.Children);
+                            parentNode?.Children?.Remove(viewModel);
+                            //6
+                            await viewModel.DeactivateAsync(true);
+                            
+                        }
                     }
                     break;
                 case EnumDataType.Sensor:
-                    ///삭제 순서
-                    ///1. _sensorProvider에서 viewModel과 동일한 Id를 검색한 후,
-                    ///2. 해당 contentControlViewModel을 Remove
-                    ///3. 해당 contentControlViewModel을 Deactivate
-                    ///4. viewModel을 통해 부모 TreeNode를 parentNode로 할당
-                    ///5. 부모 TreeNode에서 해당 자식노드를 Remove
-                    ///6. 해당 TreeContentControlViewModel을 Deactivate
-                    rootNode = TreeManager.GetRootNode(viewModel);
-                    if (rootNode.DataType == EnumDataType.DeviceRoot)
                     {
-                        //1
-                        var contentControlViewModel = _sensorProvider.Where(t => t.Id == TreeManager.GetSensorProviderId(viewModel.Id)).FirstOrDefault();
-                        //2
-                        _sensorProvider.Remove(contentControlViewModel);
-                        await _eventAggregator.PublishOnUIThreadAsync(new SensorContentRemoveMessageModel(contentControlViewModel))
-                            .ContinueWith(async (t,_)=> await contentControlViewModel?.DeactivateAsync(true), null, TaskScheduler.FromCurrentSynchronizationContext());
-                        //3
-                        //4
-                        var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-                        //5
-                        parentNode?.Children?.Remove(viewModel);
-                        //6
-                        await viewModel.DeactivateAsync(true);
+                        ///삭제 순서
+                        ///1. _sensorProvider에서 viewModel과 동일한 Id를 검색한 후,
+                        ///2. 해당 contentControlViewModel을 Remove
+                        ///3. 해당 contentControlViewModel을 Deactivate
+                        ///4. viewModel을 통해 부모 TreeNode를 parentNode로 할당
+                        ///5. 부모 TreeNode에서 해당 자식노드를 Remove
+                        ///6. 해당 TreeContentControlViewModel을 Deactivate
+                        ///7. SymbolSensorViewModel을 삭제
+                        var rootNode = TreeManager.GetRootNode(viewModel);
+                        if (rootNode.DataType == EnumDataType.DeviceRoot)
+                        {
+                            //1
+                            var contentControlViewModel = _sensorProvider.Where(t => t.Id == TreeManager.GetSensorProviderId(viewModel.Id)).FirstOrDefault();
+                            //2
+                            _sensorProvider.Remove(contentControlViewModel);
+                            await _eventAggregator.PublishOnUIThreadAsync(new SensorContentRemoveMessageModel(contentControlViewModel))
+                                .ContinueWith(async (t, _) => await contentControlViewModel?.DeactivateAsync(true), null, TaskScheduler.FromCurrentSynchronizationContext());
+                            //3
+                            //4
+                            var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
+                            //5
+                            parentNode?.Children?.Remove(viewModel);
+                            //6
+                            await viewModel.DeactivateAsync(true);
+                            ///7
+                            var symbolProvider = IoC.Get<SymbolSensorProvider>();
+                            var symbol = symbolProvider?.CollectionEntity?.Where(t => t.Id == contentControlViewModel.Id)?.FirstOrDefault();
+                            if(symbol != null)
+                            {
+                                symbol.Deactivate();
+                                symbolProvider.Remove(symbol);
+                                symbol = null;
+                                _eventAggregator?.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
+                            }
+                        }
+                        else if (rootNode.DataType == EnumDataType.GroupRoot)
+                        {
+                            _sensorProvider.Where(t => t.Id == TreeManager.GetSensorProviderId(viewModel.Id)).Select(t => t.NameArea = null);
+                            //4
+                            var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
+                            //5
+                            TreeManager.SetTreeClear(viewModel.Children);
+                            parentNode?.Children?.Remove(viewModel);
+                            //6
+                            await viewModel.DeactivateAsync(true);
+                        }
                     }
-                    else if (rootNode.DataType == EnumDataType.GroupRoot)
-                    {
-                        _sensorProvider.Where(t => t.Id == TreeManager.GetSensorProviderId(viewModel.Id)).Select(t=>t.NameArea = null);
-                        //4
-                        var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-                        //5
-                        TreeManager.SetTreeClear(viewModel.Children);
-                        parentNode?.Children?.Remove(viewModel);
-                        //6
-                        await viewModel.DeactivateAsync(true);
-                    }
-                    //await _eventAggregator?.PublishOnUIThreadAsync(new SensorTreeRemoveMessageModel(viewModel));
-
                     break;
                 case EnumDataType.Group:
                     ///삭제 순서
@@ -417,6 +439,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                     ///4. viewModel을 통해 부모 TreeNode를 parentNode로 할당
                     ///5. 부모 TreeNode에서 해당 자식노드를 Remove
                     ///6. 해당 TreeContentControlViewModel을 Deactivate
+                    ///7. SymbolGroupViewModel을 삭제
                     {
                         var sensorList = _sensorProvider.Where(t => t.NameArea == viewModel.Name).ToList();
                         foreach (var item in sensorList)
@@ -437,8 +460,17 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         parentNode?.Children?.Remove(viewModel);
                         //6
                         await viewModel.DeactivateAsync(true);
+                        ///7
+                        //var symbolProvider = IoC.Get<SymbolGroupProvider>();
+                        //var symbol = symbolProvider?.CollectionEntity?.Where(t => t.Id == contentControlViewModel.Id)?.FirstOrDefault();
+                        /*if (symbol != null)
+                        {
+                            symbol.Deactivate();
+                            symbolProvider.Remove(symbol);
+                            symbol = null;
+                            _eventAggregator?.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
+                        }*/
                     }
-                    //await _eventAggregator?.PublishOnUIThreadAsync(new GroupTreeRemoveMessageModel(viewModel));
                     break;
                 case EnumDataType.Camera:
                     ///삭제 순서
@@ -461,8 +493,17 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         parentNode?.Children?.Remove(viewModel);
                         //6
                         await viewModel.DeactivateAsync(true);
+                        ///7
+                        var symbolProvider = IoC.Get<SymbolCameraProvider>();
+                        var symbol = symbolProvider?.CollectionEntity?.Where(t => t.Id == contentControlViewModel.Id)?.FirstOrDefault();
+                        if (symbol != null)
+                        {
+                            symbol.Deactivate();
+                            symbolProvider.Remove(symbol);
+                            symbol = null;
+                            _eventAggregator?.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
+                        }
                     }
-                    //await _eventAggregator?.PublishOnUIThreadAsync(new CameraTreeRemoveMessageModel(viewModel));
                     break;
             }
         }

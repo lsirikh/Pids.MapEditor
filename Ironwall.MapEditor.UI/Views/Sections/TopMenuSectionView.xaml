@@ -74,6 +74,7 @@
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem ToolTip="센서"
+                      cal:Message.Attach="[Event Click]=[Action OnClickAddSymbolSensor($source, $eventArgs)]"
                       IsEnabled="{Binding DrawingType
                 , UpdateSourceTrigger=PropertyChanged
                 , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='Sensor'}">
@@ -102,6 +103,7 @@
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem ToolTip="카메라"
+                      cal:Message.Attach="[Event Click]=[Action OnClickAddSymbolCamera($source, $eventArgs)]"
                       IsEnabled="{Binding DrawingType
                 , UpdateSourceTrigger=PropertyChanged
                 , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='IpCamera'}">

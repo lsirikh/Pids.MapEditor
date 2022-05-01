@@ -218,6 +218,23 @@ namespace Ironwall.MapEditor.Ui.Helpers
             return GetRootNode(parentNode);
         }
 
+
+        public static void SetTreeUnselected(TrulyObservableCollection<TreeContentControlViewModel> collection)
+        {
+            ///입력 파라미터 collection 검증
+            if (!(collection != null && collection.Count() > 0))
+                return;
+
+            foreach (var item in collection.ToList())
+            {
+                if (item.Children?.Count() > 0)
+                    SetTreeUnselected(item.Children);
+
+                item.IsSelected = false;
+            }
+        }
+
+
         /// <summary>
         /// TreeRecursiveRemover - 트리 구조를 삭제하기 위한 기능을 제공. 동일 레벨의 노드 및 자식 트리의 개별 노드를 삭제, Deactivate 시키는 메소드
         /// </summary>
@@ -236,7 +253,12 @@ namespace Ironwall.MapEditor.Ui.Helpers
                 if (item.ParentTree is TreeContentControlViewModel parent)
                 {
                     await item.DeactivateAsync(true);
-                    parent.Children.Remove(item);
+                    DispatcherService.Invoke((System.Action)(() =>
+                    {
+                        ///TreeNode 추가
+                        //treeParent.Children.Add(treeNode);
+                        parent.Children.Remove(item);
+                    }));
                 }
                 else
                     await item.DeactivateAsync(true);

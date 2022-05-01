@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Ironwall.Enums;
+using Ironwall.Framework.DataProviders;
 using Ironwall.Framework.Helpers;
 using Ironwall.Framework.Models;
 using Ironwall.Framework.Services;
@@ -13,6 +14,7 @@ using Ironwall.MapEditor.UI.Models.Messages.PopupDialogs;
 using Ironwall.MapEditor.UI.Models.Messages.Process;
 using Ironwall.MapEditor.UI.ViewModels.ContentControls;
 using Ironwall.MapEditor.UI.ViewModels.RegisteredItems;
+using Ironwall.MapEditor.UI.ViewModels.Symbols;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -29,7 +31,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         : BaseViewModel
         , IPanelViewModel
     {
-        
+
         #region - Ctors -
         public LoadPanelViewModel(
             MapProvider mapProvider
@@ -37,10 +39,13 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             , SensorProvider sensorProvider
             , GroupProvider groupProvider
             , CameraProvider cameraProvider
-            
-            //, CanvasMapEntityProvider canvasMapEntityProvider
 
-            , MapTreeViewModel mapTreeViewModel 
+            , SymbolControllerProvider symbolControllerProvider
+            , SymbolSensorProvider symbolSensorProvider
+            //, SymbolGroupProvider symbolGroupProvider
+            , SymbolCameraProvider symbolCameraProvider
+
+            , MapTreeViewModel mapTreeViewModel
             , DeviceTreeViewModel deviceTreeViewModel
             , GroupTreeViewModel groupTreeViewModel
             , CameraTreeViewModel cameraTreeViewModel
@@ -61,6 +66,10 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             _sensorProvider = sensorProvider;
             _groupProvider = groupProvider;
             _cameraProvider = cameraProvider;
+
+            _symbolControllerProvider = symbolControllerProvider;
+            _symbolSensorProvider = symbolSensorProvider;
+            _symbolCameraProvider = symbolCameraProvider;
 
             _canvasMapEntityProvider = canvasMapEntityProvider;
 
@@ -91,26 +100,41 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             {
                 ///로딩화면 시현
                 await _eventAggregator.PublishOnCurrentThreadAsync(new OpenProgressPopupMessageModel(), _cancellationTokenSource.Token);
-
                 ///파일 불러오기 Task 실행
                 if (MapData != null)
-                    await DoMapTask();
+                {
+                    var task = DoMapTask();
+                    await task;
+                    Debug.WriteLine($"DoMapTask : {task.Result}");
+                }
 
                 if (GroupData != null)
-                    await DoGroupTask();
+                {
+                    var task = DoGroupTask();
+                    await task;
+                    Debug.WriteLine($"DoGroupTask : {task.Result}");
+                }
 
                 if (ControllerData != null)
-                    await DoControllerTask();
+                {
+                    var task = DoControllerTask();
+                    await task;
+                    Debug.WriteLine($"DoControllerTask : {task.Result}");
+                }
 
                 if (SensorData != null)
-                    await DoSensorTask();
+                {
+                    var task = DoSensorTask();
+                    await task;
+                    Debug.WriteLine($"DoSensorTask : {task.Result}");
+                }
 
                 if (CameraData != null)
-                    await DoCameraTask();
-
-                await Task.Delay(500)
-                    .ContinueWith((_, t) => _eventAggregator.PublishOnUIThreadAsync(new ClosePopupDialogMessageModel()), _cancellationTokenSource.Token)
-                    .ContinueWith((_, t) => _eventAggregator.PublishOnUIThreadAsync(new ClosePanelMessageModel()), _cancellationTokenSource.Token);
+                {
+                    var task = DoCameraTask();
+                    await task;
+                    Debug.WriteLine($"DoCameraTask : {task.Result}");
+                }
             }
             catch (Exception ex)
             {
@@ -119,50 +143,58 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             }
             finally
             {
-                await Task.Run(() => _canvasMapEntityProvider.Setup());
-                _mapTreeViewModel.SelectOne();
-            }
-            
-        }
-
-        private async Task DoMapTask()
-        {
-            var task = FileManager.ReadCSVFile<MapModel>(MapData, _cancellationTokenSource.Token);
-            var data = await task;
-            if (data.Count() > 0)
-            {
-                RemoveAllTree(_mapTreeViewModel);
-                await RemoveCollectionEntity(_mapProvider);
-                await InsertCollectionEntity(_mapProvider, data, _eventAggregator);
+                var awaiter = _canvasMapEntityProvider.SetupAsync().GetAwaiter();
+                awaiter.OnCompleted(async () =>
+                {
+                    await _mapTreeViewModel.SelectDefaultMapAsync();
+                });
+                await _eventAggregator.PublishOnUIThreadAsync(new ClosePopupDialogMessageModel(), _cancellationTokenSource.Token);
+                await _eventAggregator.PublishOnUIThreadAsync(new ClosePanelMessageModel(), _cancellationTokenSource.Token);
             }
         }
 
-        private async Task RemoveCollectionEntity(MapProvider provider)
+        private Task<bool> DoMapTask()
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
-                    foreach (var item in provider.CollectionEntity)
+                    var task = FileManager.ReadCSVFile<MapModel>(MapData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
                     {
-                        if (item.IsActive)
-                            await item.DeactivateAsync(true);
+                        var treeResult = await RemoveAllTree(_mapTreeViewModel);
+                        var contentResult = await RemoveCollectionEntity(_mapProvider);
+                        if (treeResult || contentResult)
+                            await InsertCollectionEntity(_mapProvider, data, _eventAggregator);
                     }
-                    provider.Clear();
+                    return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw;
+                    Debug.WriteLine($"Raised Exception in DoMapTask : {ex.Message}");
+                    return false;
                 }
             });
-
-            task.Start();
-            await task;
         }
 
-        private async Task InsertCollectionEntity(MapProvider provider, IEnumerable<MapModel> data, IEventAggregator eventAggregator = null, CancellationToken token = default)
+        private Task<bool> RemoveCollectionEntity(MapProvider provider)
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
+            {
+                foreach (var item in provider.CollectionEntity)
+                {
+                    if (item.IsActive)
+                        await item.DeactivateAsync(true);
+                }
+                provider.Clear();
+                return true;
+            });
+        }
+
+        private Task<bool> InsertCollectionEntity(MapProvider provider, IEnumerable<MapModel> data, IEventAggregator eventAggregator = null, CancellationToken token = default)
+        {
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -171,83 +203,94 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     foreach (var item in data)
                     {
                         if (token.IsCancellationRequested)
-                            return;
+                            return true;
 
-                        var contentControlViewModel = new MapContentControlViewModel(item, eventAggregator);
+                        var contentControlViewModel = new MapContentControlViewModel(item, eventAggregator) { DisplayName = $"{item.Id} {EnumDataType.Map.ToString()}", broadCastring = false, };
                         await contentControlViewModel.ActivateAsync();
                         provider.Add(contentControlViewModel);
 
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _mapTreeViewModel);
                     }
-                    return;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return false;
                 }
-            }, token);
-
-            task.Start();
-            await task;
+            }, cancellationToken: token);
         }
 
-        private async Task AddTreeNode(MapContentControlViewModel contentControlViewModel, MapTreeViewModel treeViewModel)
+        private Task<bool> AddTreeNode(MapContentControlViewModel contentControlViewModel, MapTreeViewModel treeViewModel)
         {
-            var id = contentControlViewModel.Id;
-            var treeParent = treeViewModel.Items.FirstOrDefault();
-            var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeMapId(id), contentControlViewModel.MapName, contentControlViewModel.Url, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Map, _eventAggregator, _mapProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Map.ToString()}" };
-            ///TreeNode 활성화
-            await treeNode?.ActivateAsync();
-
-            DispatcherService.Invoke((System.Action)(() =>
+            return Task.Run(async () =>
             {
-                ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
+                DispatcherService.Invoke((System.Action)(async () =>
+                {
+                    var id = contentControlViewModel.Id;
+                    var treeParent = treeViewModel.Items.FirstOrDefault();
+                    var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeMapId(id), contentControlViewModel.MapName, contentControlViewModel.Url, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Map, _eventAggregator, _mapProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Map.ToString()}" };
+                    ///TreeNode 활성화
+                    await treeNode?.ActivateAsync();
+                    treeParent.Children.Add(treeNode);
+                }));
+                return true;
+            });
 
-                ///TreeNode 추가
-                treeParent.Children.Add(treeNode);
-            }));
         }
 
-        private async Task DoControllerTask()
+        private Task<bool> DoControllerTask()
         {
-            var task = FileManager.ReadCSVFile<SymbolModel>(ControllerData, _cancellationTokenSource.Token);
-            var data = await task;
-            if (data.Count() > 0)
-            {
-                RemoveAllTree(_deviceTreeViewModel);
-                await RemoveCollectionEntity(_controllerProvider);
-                await InsertCollectionEntity(_controllerProvider, data, _eventAggregator);
-            }
-        }
-
-        private async Task RemoveCollectionEntity(ControllerProvider provider)
-        {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
-                    foreach (var item in provider.CollectionEntity)
+                    var task = FileManager.ReadCSVFile<SymbolModel>(ControllerData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
                     {
-                        if (item.IsActive)
-                            await item.DeactivateAsync(true);
+                        var treeResult = await RemoveAllTree(_deviceTreeViewModel, "Controller");
+                        var contentResult = await RemoveCollectionEntity(_controllerProvider, _symbolControllerProvider);
+
+                        if (treeResult || contentResult)
+                            await InsertCollectionEntity(_controllerProvider, _symbolControllerProvider, data, _eventAggregator);
                     }
-                    provider.Clear();
+                    return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw;
+                    Debug.WriteLine($"Raised Exception in DoControllerTask : {ex.Message}");
+                    return false;
                 }
             });
-
-            task.Start();
-            await task;
         }
 
-        private async Task InsertCollectionEntity(ControllerProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        private Task<bool> RemoveCollectionEntity(ControllerProvider provider, SymbolControllerProvider symbolProvider)
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
+            {
+                ///ContentControlPrivider
+                foreach (var item in provider.CollectionEntity)
+                {
+                    if (item.IsActive)
+                        await item.DeactivateAsync(true);
+                }
+                provider.Clear();
+
+                ///SymbolProvider
+                foreach (var symbolItem in symbolProvider.CollectionEntity)
+                {
+                    symbolItem.Deactivate();
+                }
+                symbolProvider.Clear();
+                return true;
+            });
+        }
+
+        private Task<bool> InsertCollectionEntity(ControllerProvider provider, SymbolControllerProvider symbolProvider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        {
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -256,7 +299,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     foreach (var item in data)
                     {
                         if (token.IsCancellationRequested)
-                            return;
+                            return true;
 
                         var contentControlViewModel = new ControllerContentControlViewModel(item, eventAggregator, _controllerProvider, _mapProvider);
 
@@ -264,78 +307,104 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
 
                         provider.Add(contentControlViewModel);
 
+                        var symbol = new SymbolControllerViewModel(contentControlViewModel, eventAggregator);
+                        symbol.Activate();
+                        symbolProvider.Add(symbol);
+
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _deviceTreeViewModel);
                     }
-                    return;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return false;
                 }
             }, token);
-
-            task.Start();
-            await task;
         }
 
-        private async Task AddTreeNode(ControllerContentControlViewModel contentControlViewModel, DeviceTreeViewModel treeViewModel)
+        private Task<bool> AddTreeNode(ControllerContentControlViewModel contentControlViewModel, DeviceTreeViewModel treeViewModel)
         {
-            ///TreeContentControlViewModel 생성
-            var id = contentControlViewModel.Id;
-            var treeParent = treeViewModel.Items.FirstOrDefault();
-            var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeControllerId(id), contentControlViewModel.IdController.ToString(), contentControlViewModel.NameDevice, EnumTreeType.BRANCH, true, true, treeParent, EnumDataType.Controller, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{contentControlViewModel.IdController} {EnumDataType.Controller.ToString()}" };
-            ///5
-            await treeNode?.ActivateAsync();
-            ///6
-            DispatcherService.Invoke((System.Action)(() =>
+            return Task.Run(async () =>
             {
-                ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
+                ///TreeContentControlViewModel 생성
+                var id = contentControlViewModel.Id;
+                var treeParent = treeViewModel.Items.FirstOrDefault();
+                var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeControllerId(id), contentControlViewModel.IdController.ToString(), contentControlViewModel.NameDevice, EnumTreeType.BRANCH, true, true, treeParent, EnumDataType.Controller, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{contentControlViewModel.IdController} {EnumDataType.Controller.ToString()}" };
+                ///5
+                await treeNode?.ActivateAsync();
+                ///6
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    ///TreeNode 추가
+                    treeParent.Children.Add(treeNode);
+                }));
 
-                ///TreeNode 추가
-                treeParent.Children.Add(treeNode);
-            }));
+                return true;
+            });
+
         }
 
-        private async Task DoSensorTask()
+        private Task<bool> DoSensorTask()
         {
-            var task = FileManager.ReadCSVFile<SymbolModel>(SensorData, _cancellationTokenSource.Token);
-            var data = await task;
-            if (data.Count() > 0)
-            {
-                RemoveAllSensorTree(_deviceTreeViewModel);
-                await RemoveCollectionEntity(_sensorProvider);
-                await InsertCollectionEntity(_sensorProvider, data, _eventAggregator);
-            }
-        }
-
-        private async Task RemoveCollectionEntity(SensorProvider provider)
-        {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
+                    var task = FileManager.ReadCSVFile<SymbolModel>(SensorData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
+                    {
+                        var treeResult = await RemoveAllTree(_deviceTreeViewModel, "Sensor");
+                        var contentResult = await RemoveCollectionEntity(_sensorProvider, _symbolSensorProvider);
+                        if (treeResult || contentResult)
+                            await InsertCollectionEntity(_sensorProvider, _symbolSensorProvider, data, _eventAggregator);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Raised Exception in DoSensorTask : {ex.Message}");
+                    return false;
+                }
+            });
+
+        }
+
+        private Task<bool> RemoveCollectionEntity(SensorProvider provider, SymbolSensorProvider symbolProvider)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    ///ContentControlProvider
                     foreach (var item in provider.CollectionEntity)
                     {
                         if (item.IsActive)
                             await item.DeactivateAsync(true);
                     }
                     provider.Clear();
+
+                    ///SymbolProvider
+                    foreach (var symbolItem in symbolProvider.CollectionEntity)
+                    {
+                        symbolItem.Deactivate();
+                    }
+                    symbolProvider.Clear();
+
+                    return true;
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return false;
                 }
             });
-
-            task.Start();
-            await task;
         }
 
-        private async Task InsertCollectionEntity(SensorProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        private Task InsertCollectionEntity(SensorProvider provider, SymbolSensorProvider symbolProvider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -344,86 +413,110 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     foreach (var item in data)
                     {
                         if (token.IsCancellationRequested)
-                            return;
+                            return Task.CompletedTask;
 
                         var contentControlViewModel = new SensorContentControlViewModel(item, eventAggregator, _sensorProvider, _groupProvider, _controllerProvider, _mapProvider);
                         await contentControlViewModel.ActivateAsync();
                         provider.Add(contentControlViewModel);
 
+                        var symbol = new SymbolSensorViewModel(contentControlViewModel, eventAggregator);
+                        symbol.Activate();
+                        symbolProvider.Add(symbol);
+
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _deviceTreeViewModel);
                     }
-                    return;
+                    return Task.CompletedTask;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return Task.CompletedTask;
                 }
             }, token);
-
-            task.Start();
-            await task;
         }
 
-        private async Task AddTreeNode(SensorContentControlViewModel contentControlViewModel, DeviceTreeViewModel treeViewModel)
+        private Task<bool> AddTreeNode(SensorContentControlViewModel contentControlViewModel, DeviceTreeViewModel treeViewModel)
         {
-            ///TreeContentControlViewModel 생성
-            var id = contentControlViewModel.Id;
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            var treeParent = treeRoot.Children.Where(t => t.Name == contentControlViewModel.IdController.ToString()).FirstOrDefault();
-            var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeSensorId(id), contentControlViewModel.IdSensor.ToString(), contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Sensor, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{contentControlViewModel.IdSensor} {EnumDataType.Sensor.ToString()}" };
-            ///5
-            await treeNode?.ActivateAsync();
-            ///6
-            DispatcherService.Invoke((System.Action)(() =>
+            return Task.Run(async () =>
             {
-                ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
-
-                ///TreeNode 추가
-                treeParent.Children.Add(treeNode);
-            }));
-
-            await _eventAggregator.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel), _cancellationTokenSource.Token);
+                ///TreeContentControlViewModel 생성
+                var id = contentControlViewModel.Id;
+                var treeRoot = treeViewModel.Items.FirstOrDefault();
+                var treeParent = treeRoot.Children.Where(t => t.Name == contentControlViewModel.IdController.ToString()).FirstOrDefault();
+                var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeSensorId(id), contentControlViewModel.IdSensor.ToString(), contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Sensor, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{contentControlViewModel.IdSensor} {EnumDataType.Sensor.ToString()}" };
+                ///5
+                await treeNode?.ActivateAsync();
+                ///6
+                DispatcherService.Invoke((System.Action)(() =>
+                    {
+                        ///TreeNode 추가
+                        treeParent.Children.Add(treeNode);
+                    }));
+                return true;
+            });
         }
 
-        private async Task DoGroupTask()
+        private Task<bool> DoGroupTask()
         {
-            var task = FileManager.ReadCSVFile<SymbolModel>(GroupData, _cancellationTokenSource.Token);
-            var data = await task;
-            if (data.Count() > 0)
-            {
-                RemoveAllTree(_groupTreeViewModel);
-                await RemoveCollectionEntity(_groupProvider);
-                await InsertCollectionEntity(_groupProvider, data, _eventAggregator);
-            }
-        }
-
-        private async Task RemoveCollectionEntity(GroupProvider provider)
-        {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
+                    var task = FileManager.ReadCSVFile<SymbolModel>(GroupData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
+                    {
+                        var treeResult = await RemoveAllTree(_groupTreeViewModel);
+                        var contentResult = await RemoveCollectionEntity(_groupProvider);
+                        if (treeResult || contentResult)
+                            await InsertCollectionEntity(_groupProvider, data, _eventAggregator);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Raised Exception in DoGroupTask : {ex.Message}");
+                    return false;
+                }
+            });
+        }
+
+        private Task<bool> RemoveCollectionEntity(GroupProvider provider
+            //, GroupSymbolProvider symbolProvider
+            )
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    ///ContentControlProvider
                     foreach (var item in provider.CollectionEntity)
                     {
                         if (item.IsActive)
                             await item.DeactivateAsync(true);
                     }
                     provider.Clear();
+
+                    ///SymbolProvider
+                    /*foreach (var symbolItem in symbolProvider.CollectionEntity)
+                    {
+                        symbolItem.Deactivate();
+                    }
+                    symbolProvider.Clear();*/
+
+                    return true;
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return false;
                 }
             });
-            task.Start();
-            await task;
         }
 
-        private async Task InsertCollectionEntity(GroupProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        private Task<bool> InsertCollectionEntity(GroupProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -432,84 +525,107 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     foreach (var item in data)
                     {
                         if (token.IsCancellationRequested)
-                            return;
+                            return false;
 
                         var contentControlViewModel = new GroupContentControlViewModel(item, eventAggregator, _groupProvider, _mapProvider);
                         await contentControlViewModel.ActivateAsync();
                         provider.Add(contentControlViewModel);
 
+                        /*var symbol = new SymbolGroupViewModel(contentControlViewModel, eventAggregator);
+                        symbol.Activate();
+                        symbolProvider.Add(symbol);*/
+
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _groupTreeViewModel);
                     }
-                    return;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return false;
                 }
             }, token);
-
-            task.Start();
-            await task;
         }
 
-        private async Task AddTreeNode(GroupContentControlViewModel contentControlViewModel, GroupTreeViewModel treeViewModel)
+        private Task<bool> AddTreeNode(GroupContentControlViewModel contentControlViewModel, GroupTreeViewModel treeViewModel)
         {
-            ///TreeContentControlViewModel 생성
-            var id = contentControlViewModel.Id;
-            var treeParent = treeViewModel.Items.FirstOrDefault();
-            var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeGroupId(id), contentControlViewModel.NameArea, contentControlViewModel.NameArea, EnumTreeType.BRANCH, true, true, treeParent, EnumDataType.Group, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{id} {EnumDataType.Group.ToString()}" };
-            ///5
-            await treeNode?.ActivateAsync();
-            ///6
-            DispatcherService.Invoke((System.Action)(() =>
+            return Task.Run(async () =>
             {
-                ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
-
-                ///TreeNode 추가
-                treeParent.Children.Add(treeNode);
-            }));
+                ///TreeContentControlViewModel 생성
+                var id = contentControlViewModel.Id;
+                var treeParent = treeViewModel.Items.FirstOrDefault();
+                var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeGroupId(id), contentControlViewModel.NameArea, contentControlViewModel.NameArea, EnumTreeType.BRANCH, true, true, treeParent, EnumDataType.Group, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{id} {EnumDataType.Group.ToString()}" };
+                ///5
+                await treeNode?.ActivateAsync();
+                ///6
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    ///TreeNode 추가
+                    treeParent.Children.Add(treeNode);
+                }));
+                return true;
+            });
         }
 
-        private async Task DoCameraTask()
+        private Task<bool> DoCameraTask()
         {
-            var task = FileManager.ReadCSVFile<SymbolModel>(CameraData, _cancellationTokenSource.Token);
-            var data = await task;
-            if (data.Count() > 0)
-            {
-                RemoveAllTree(_cameraTreeViewModel);
-                await RemoveCollectionEntity(_cameraProvider);
-                await InsertCollectionEntity(_cameraProvider, data, _eventAggregator);
-            }
-        }
-
-        private async Task RemoveCollectionEntity(CameraProvider provider)
-        {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
+                    var task = FileManager.ReadCSVFile<SymbolModel>(CameraData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
+                    {
+                        var treeResult = await RemoveAllTree(_cameraTreeViewModel);
+                        var contentResult = await RemoveCollectionEntity(_cameraProvider, _symbolCameraProvider);
+                        if (treeResult && contentResult)
+                            await InsertCollectionEntity(_cameraProvider, _symbolCameraProvider, data, _eventAggregator);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Raised Exception in DoCameraTask : {ex.Message}");
+                    return false;
+                }
+            });
+        }
+
+        private Task<bool> RemoveCollectionEntity(CameraProvider provider, SymbolCameraProvider symbolProvider)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    ///ContentControlProvider
                     foreach (var item in provider.CollectionEntity)
                     {
                         if (item.IsActive)
                             await item.DeactivateAsync(true);
                     }
                     provider.Clear();
+
+                    ///SymbolProvider
+                    foreach (var symbolItem in symbolProvider.CollectionEntity)
+                    {
+                        symbolItem.Deactivate();
+                    }
+                    symbolProvider.Clear();
+
+                    return true;
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return false;
                 }
             });
-
-            task.Start();
-            await task;
         }
 
-        private async Task InsertCollectionEntity(CameraProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        private Task<bool> InsertCollectionEntity(CameraProvider provider, SymbolCameraProvider symbolProvider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
         {
-            var task = new Task(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -518,72 +634,90 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     foreach (var item in data)
                     {
                         if (token.IsCancellationRequested)
-                            return;
+                            return false;
 
                         var contentControlViewModel = new CameraContentControlViewModel(item, eventAggregator, _cameraProvider, _mapProvider);
                         await contentControlViewModel.ActivateAsync();
                         provider.Add(contentControlViewModel);
 
+                        var symbol = new SymbolCameraViewModel(contentControlViewModel, eventAggregator);
+                        symbol.Activate();
+                        symbolProvider.Add(symbol);
+
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _cameraTreeViewModel);
+
                     }
-                    return;
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return false;
                 }
             }, token);
-
-            task.Start();
-            await task;
         }
 
-        private async Task AddTreeNode(CameraContentControlViewModel contentControlViewModel, CameraTreeViewModel treeViewModel)
+        private Task<bool> AddTreeNode(CameraContentControlViewModel contentControlViewModel, CameraTreeViewModel treeViewModel)
         {
-            ///TreeContentControlViewModel 생성
-            var id = contentControlViewModel.Id;
-            var treeParent = treeViewModel.Items.FirstOrDefault();
-            var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeCameraId(id), contentControlViewModel.NameDevice, contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Camera, _eventAggregator, _mapProvider, _cameraProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Camera.ToString()}" };
-            ///TreeNode 활성화
-            await treeNode?.ActivateAsync();
-            DispatcherService.Invoke((System.Action)(() =>
+            return Task.Run(async () =>
             {
-                ///UI 쓰레드에 의해 점유중인 자원에 대해선 자원에 
-                ///수정을 가할 때 UI 쓰레드의 Dispatcher에 작업을 위임해야 한다. 
-
-                ///TreeNode 추가
-                treeParent.Children.Add(treeNode);
-            }));
+                ///TreeContentControlViewModel 생성
+                var id = contentControlViewModel.Id;
+                var treeParent = treeViewModel.Items.FirstOrDefault();
+                var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeCameraId(id), contentControlViewModel.NameDevice, contentControlViewModel.NameDevice, EnumTreeType.LEAF, true, true, treeParent, EnumDataType.Camera, _eventAggregator, _mapProvider, _cameraProvider) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{id} {EnumDataType.Camera.ToString()}" };
+                ///TreeNode 활성화
+                await treeNode?.ActivateAsync();
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    ///TreeNode 추가
+                    treeParent.Children.Add(treeNode);
+                }));
+                return true;
+            });
         }
 
-        private void RemoveAllTree(MapTreeViewModel treeViewModel)
+        private Task<bool> RemoveAllTree(object viewModel, string type = null)
         {
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            TreeManager.SetTreeClear(treeRoot.Children);
-        }
-        private void RemoveAllTree(DeviceTreeViewModel treeViewModel)
-        {
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            TreeManager.SetTreeClear(treeRoot.Children);
-        }
-        private void RemoveAllSensorTree(DeviceTreeViewModel treeViewModel)
-        {
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            foreach (var item in treeRoot.Children)
+            return Task.Run(() =>
             {
-                TreeManager.SetTreeClear(item.Children);
-            }
-        }
-        private void RemoveAllTree(GroupTreeViewModel treeViewModel)
-        {
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            TreeManager.SetTreeClear(treeRoot.Children);
-        }
-        private void RemoveAllTree(CameraTreeViewModel treeViewModel)
-        {
-            var treeRoot = treeViewModel.Items.FirstOrDefault();
-            TreeManager.SetTreeClear(treeRoot.Children);
+                if (viewModel.GetType() == typeof(MapTreeViewModel))
+                {
+                    var vm = viewModel as MapTreeViewModel;
+                    var treeRoot = vm.Items.FirstOrDefault();
+                    TreeManager.SetTreeClear(treeRoot.Children);
+                }
+                else if (viewModel.GetType() == typeof(DeviceTreeViewModel))
+                {
+                    var vm = viewModel as DeviceTreeViewModel;
+                    if (type == "Controller")
+                    {
+                        var treeRoot = vm.Items.FirstOrDefault();
+                        TreeManager.SetTreeClear(treeRoot.Children);
+                    }
+                    else
+                    {
+                        var treeRoot = vm.Items.FirstOrDefault();
+                        foreach (var item in treeRoot.Children)
+                        {
+                            TreeManager.SetTreeClear(item.Children);
+                        }
+                    }
+                }
+                else if (viewModel.GetType() == typeof(GroupTreeViewModel))
+                {
+                    var vm = viewModel as GroupTreeViewModel;
+                    var treeRoot = vm.Items.FirstOrDefault();
+                    TreeManager.SetTreeClear(treeRoot.Children);
+                }
+                else if (viewModel.GetType() == typeof(CameraTreeViewModel))
+                {
+                    var vm = viewModel as CameraTreeViewModel;
+                    var treeRoot = vm.Items.FirstOrDefault();
+                    TreeManager.SetTreeClear(treeRoot.Children);
+                }
+                return true;
+            });
         }
 
 
@@ -610,49 +744,10 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         }
         #endregion
         #region - Binding Methods -
-        public bool CanClickToLoadMapData => true;
 
-        public void ClickToLoadMapData()
-        {
-            MapData = SetFileLoader();
-            NotifyOfPropertyChange(() => MapData);
-        }
 
-        public bool CanClickToLoadControllerData => true;
-
-        public void ClickToLoadControllerData()
-        {
-            ControllerData = SetFileLoader();
-            NotifyOfPropertyChange(() => ControllerData);
-        }
-
-        public bool CanClickToLoadSensorData => true;
-
-        public void ClickToLoadSensorData()
-        {
-            SensorData = SetFileLoader();
-            NotifyOfPropertyChange(() => SensorData);
-        }
-
-        public bool CanClickToLoadGroupData => true;
-
-        public void ClickToLoadGroupData()
-        {
-            GroupData = SetFileLoader();
-            NotifyOfPropertyChange(() => GroupData);
-        }
-
-        public bool CanClickToLoadCameraData => true;
-
-        public void ClickToLoadCameraData()
-        {
-            CameraData = SetFileLoader();
-            NotifyOfPropertyChange(() => CameraData);
-        }
-        #endregion
-        #region - Processes -
-
-        private string SetFileLoader()
+        public bool CanClickToLoadData => true;
+        public void ClickToLoadData()
         {
             #region - 파일 불러오기 -
             var dialog = new OpenFileDialog();
@@ -661,23 +756,54 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             dialog.Title = "CSV 파일 선택하기";
             dialog.CheckFileExists = true; // 파일 존재 여부 확인
             dialog.CheckPathExists = true; // 폴더 존재 여부 확인
-            dialog.InitialDirectory = Directory.GetCurrentDirectory();
+            dialog.InitialDirectory = Directory.GetCurrentDirectory() + "\\" + "Csvs";
+            dialog.Multiselect = true;
 
             dialog.RestoreDirectory = true; // 폴더 위치 저장하기
 
             if (dialog.ShowDialog() == true)
             {
-                var relativeUrl = dialog.FileName;
-                FileInfo fi = new FileInfo(relativeUrl);
-                if (fi.Exists)
+                foreach (var item in dialog.FileNames)
                 {
-                    //File경로와 File명을 모두 가지고 온다.
-                    return Path.GetFullPath(relativeUrl);
+                    FileInfo fi = new FileInfo(item);
+                    if (fi.Exists)
+                    {
+                        //각 프로퍼티에 할당 이름별로
+
+                        //File경로와 File명을 모두 가지고 온다.
+                        if (item.Contains("Map_"))
+                        {
+                            MapData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => MapData);
+                        }
+                        else if (item.Contains("Controller_"))
+                        {
+                            ControllerData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => ControllerData);
+                        }
+                        else if (item.Contains("Sensor_"))
+                        {
+                            SensorData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => SensorData);
+                        }
+                        else if (item.Contains("Group_"))
+                        {
+                            GroupData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => GroupData);
+                        }
+                        else if (item.Contains("Camera_"))
+                        {
+                            CameraData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => CameraData);
+                        }
+                    }
                 }
+
             }
-            return null;
             #endregion
         }
+        #endregion
+        #region - Processes -
         #endregion
         #region - IHanldes -
         #endregion
@@ -694,7 +820,12 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         private SensorProvider _sensorProvider;
         private GroupProvider _groupProvider;
         private CameraProvider _cameraProvider;
+
+        private SymbolControllerProvider _symbolControllerProvider;
+        private SymbolSensorProvider _symbolSensorProvider;
+        private SymbolCameraProvider _symbolCameraProvider;
         private CanvasMapEntityProvider _canvasMapEntityProvider;
+
         private MapTreeViewModel _mapTreeViewModel;
         private DeviceTreeViewModel _deviceTreeViewModel;
         private GroupTreeViewModel _groupTreeViewModel;

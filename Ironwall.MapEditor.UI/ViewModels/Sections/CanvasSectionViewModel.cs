@@ -1,11 +1,7 @@
 ﻿using Caliburn.Micro;
 using Ironwall.Enums;
-using Ironwall.Framework.DataProviders;
-using Ironwall.Framework.Models;
-using Ironwall.Framework.ViewModels;
 using Ironwall.Framework.ViewModels.ConductorViewModels;
 using Ironwall.MapEditor.UI.DataProviders;
-using Ironwall.MapEditor.UI.Helpers;
 using Ironwall.MapEditor.UI.Models.Messages.PopupDialogs;
 using Ironwall.MapEditor.UI.Models.Messages.Process;
 using Ironwall.MapEditor.UI.Models.Messages.Sections;
@@ -13,10 +9,8 @@ using Ironwall.MapEditor.UI.ViewModels.Canvases;
 using Ironwall.MapEditor.UI.ViewModels.ContentControls;
 using Ironwall.MapEditor.UI.ViewModels.Symbols;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -41,6 +35,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             , MapProvider mapProvider
             , ControllerProvider controllerProvider
             , SymbolControllerProvider symbolControllerProvider
+            , SymbolSensorProvider symbolSensorProvider
+            , SymbolCameraProvider symbolCameraViewModels
             , CanvasMapEntityProvider canvasMapEntityProvider
             //, CanvasControllerViewModel canvasControllerViewModel
             )
@@ -56,8 +52,10 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             _mapProvider = mapProvider;
             _controllerProvider = controllerProvider;
             _symbolControllerProvider = symbolControllerProvider;
+            _symbolSensorProvider = symbolSensorProvider;
+            _symbolCameraProvider = symbolCameraViewModels;
+            
             _canvasMapEntityProvider = canvasMapEntityProvider;
-            //CanvasControllerViewModel = canvasControllerViewModel;
         }
         #endregion
         #region - Implementation of Interface -
@@ -72,22 +70,22 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             var relativePosition = e.GetPosition((ContentPresenter)sender);
             X = relativePosition.X;
             Y = relativePosition.Y;
-            if (OnCanvasPreviewSymbolViewModel != null)
+            if (OnCanvasPreviewSymbol != null)
             {
-                OnCanvasPreviewSymbolViewModel.X = X - (OnCanvasPreviewSymbolViewModel.Width / 2);
-                OnCanvasPreviewSymbolViewModel.X1 = X - (OnCanvasPreviewSymbolViewModel.Width / 2);
-                OnCanvasPreviewSymbolViewModel.Y = Y - (OnCanvasPreviewSymbolViewModel.Height / 2);
-                OnCanvasPreviewSymbolViewModel.Y1 = Y - (OnCanvasPreviewSymbolViewModel.Height / 2);
+                OnCanvasPreviewSymbol.X = X - (OnCanvasPreviewSymbol.Width / 2);
+                OnCanvasPreviewSymbol.X1 = X - (OnCanvasPreviewSymbol.Width / 2);
+                OnCanvasPreviewSymbol.Y = Y - (OnCanvasPreviewSymbol.Height / 2);
+                OnCanvasPreviewSymbol.Y1 = Y - (OnCanvasPreviewSymbol.Height / 2);
                 //NotifyOfPropertyChange(() => OnCanvasPreviewSymbolViewModel);
             }
         }
 
         public async void OnMouseClick(object sender, MouseEventArgs e)
         {
-            if (OnCanvasPreviewSymbolViewModel == null)
+            if (OnCanvasPreviewSymbol == null)
                 return;
 
-            switch (OnCanvasPreviewSymbolViewModel.TypeDevice)
+            switch (OnCanvasPreviewSymbol.TypeDevice)
             {
                 case (int)EnumDeviceType.NONE:
                     {
@@ -95,23 +93,29 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
                     break;
                 case (int)EnumDeviceType.Controller:
                     {
-                        var prevSymbol = _symbolControllerProvider.CollectionEntity.Where(t => t.IdController == OnCanvasPreviewSymbolViewModel.IdController).FirstOrDefault();
-                        if(prevSymbol != null)
+                        var provider = _symbolControllerProvider;
+                        var prevSymbol = provider.CollectionEntity.Where(t => t.Id == OnCanvasPreviewSymbol.Id).FirstOrDefault();
+                        
+                        if (prevSymbol != null)
                         {
-                            _symbolControllerProvider.Remove(prevSymbol);
+                            provider.Remove(prevSymbol);
                             prevSymbol.Deactivate();
                             prevSymbol = null;
                         }
 
-                        var symbol = new SymbolControllerViewModel(OnCanvasPreviewSymbolViewModel.SymbolContentControlViewModel, _eventAggregator);
+                        ///////////////////Type Generation//////////////////////
+                        var symbol = new SymbolControllerViewModel(OnCanvasPreviewSymbol.SymbolContentControlViewModel, _eventAggregator);
+                        ////////////////////////////////////////////////////////
                         symbol.Activate();
-                        _symbolControllerProvider.Add(symbol);
-                        await _canvasMapEntityProvider.ControllerSetup();
+                        provider.Add(symbol);
 
+                        ///////////////////Type Settings////////////////////////
+                        await _canvasMapEntityProvider.ControllerSetupAsync();
                         CanvasControllerViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasControllerViewModel[SelectedMap.MapNumber]);
+                        ////////////////////////////////////////////////////////
 
-                        OnCanvasPreviewSymbolViewModel.Deactivate();
-                        OnCanvasPreviewSymbolViewModel = null;
+                        OnCanvasPreviewSymbol.Deactivate();
+                        OnCanvasPreviewSymbol = null;
                     }
                     break;
                 case (int)EnumDeviceType.Multi:
@@ -121,13 +125,60 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
                 case (int)EnumDeviceType.PIR:
                 case (int)EnumDeviceType.IoController:
                 case (int)EnumDeviceType.Laser:
-                case (int)EnumDeviceType.Cable:
+                //case (int)EnumDeviceType.Cable:
                     {
+                        ///////////////////Provider Setting/////////////////////
+                        var provider = _symbolSensorProvider;
+                        ////////////////////////////////////////////////////////
+                        var prevSymbol = provider.CollectionEntity.Where(t => t.Id == OnCanvasPreviewSymbol.Id).FirstOrDefault();
+
+                        if (prevSymbol != null)
+                        {
+                            provider.Remove(prevSymbol);
+                            prevSymbol.Deactivate();
+                            prevSymbol = null;
+                        }
+
+                        ///////////////////Type Generation//////////////////////
+                        var symbol = new SymbolSensorViewModel(OnCanvasPreviewSymbol.SymbolContentControlViewModel, _eventAggregator);
+                        ////////////////////////////////////////////////////////
+                        symbol.Activate();
+                        provider.Add(symbol);
+
+                        ///////////////////Type Settings////////////////////////
+                        await _canvasMapEntityProvider.SensorSetupAsync();
+                        CanvasSensorViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasSensorViewModel[SelectedMap.MapNumber]);
+                        ////////////////////////////////////////////////////////
+
+                        OnCanvasPreviewSymbol.Deactivate();
+                        OnCanvasPreviewSymbol = null;
                     }
                     break;
                 case (int)EnumDeviceType.IpCamera:
                     {
+                        var provider = _symbolCameraProvider;
+                        var prevSymbol = provider.CollectionEntity.Where(t => t.Id == OnCanvasPreviewSymbol.Id).FirstOrDefault();
 
+                        if (prevSymbol != null)
+                        {
+                            provider.Remove(prevSymbol);
+                            prevSymbol.Deactivate();
+                            prevSymbol = null;
+                        }
+
+                        ///////////////////Type Generation//////////////////////
+                        var symbol = new SymbolCameraViewModel(OnCanvasPreviewSymbol.SymbolContentControlViewModel, _eventAggregator);
+                        ////////////////////////////////////////////////////////
+                        symbol.Activate();
+                        provider.Add(symbol);
+
+                        ///////////////////Type Settings////////////////////////
+                        await _canvasMapEntityProvider.CameraSetupAsync();
+                        CanvasCameraViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasCameraViewModel[SelectedMap.MapNumber]);
+                        ////////////////////////////////////////////////////////
+
+                        OnCanvasPreviewSymbol.Deactivate();
+                        OnCanvasPreviewSymbol = null;
                     }
                     break;
                 default:
@@ -168,24 +219,75 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
 
         public Task HandleAsync(OnActivePreviewSymbolMessageModel message, CancellationToken cancellationToken)
         {
-            var vm = message?.ViewModel;
-            OnCanvasPreviewSymbolViewModel = new OnCanvasPreviewSymbolViewModel(vm, _eventAggregator);
-            OnCanvasPreviewSymbolViewModel.Activate();
-            return Task.CompletedTask;
+            try
+            {
+                var vm = message?.ViewModel;
+                //string[] nsTargets = { "Controllers", "Cameras" };
+                switch (vm.TypeDevice)
+                {
+                    case (int)EnumDeviceType.NONE:
+                        {
+                        }
+                        break;
+                    case (int)EnumDeviceType.Controller:
+                        {
+                            //var dataContext = IoC.Get<OnCanvasPreviewSymbolViewModel>();
+                            //var view = new SymbolCameraView() { DataContext = dataContext };
+                            //ViewLocator.AddNamespaceMapping("Ironwall.MapEditor.UI.ViewModels.Symbols", "Ironwall.MapEditor.UI.ViewModels.Symbols.Controllers");
+                            OnCanvasPreviewSymbol = new OnPreviewControllerViewModel(vm, _eventAggregator);
+                            OnCanvasPreviewSymbol.Activate();
+                        }
+                        break;
+                    case (int)EnumDeviceType.Multi:
+                    case (int)EnumDeviceType.Fence:
+                    case (int)EnumDeviceType.Underground:
+                    case (int)EnumDeviceType.Contact:
+                    case (int)EnumDeviceType.PIR:
+                    case (int)EnumDeviceType.IoController:
+                    case (int)EnumDeviceType.Laser:
+                    case (int)EnumDeviceType.Cable:
+                        {
+                            OnCanvasPreviewSymbol = new OnPreviewSensorViewModel(vm, _eventAggregator);
+                            OnCanvasPreviewSymbol.Activate();
+                        }
+                        break;
+                    case (int)EnumDeviceType.IpCamera:
+                        {
+                            //ViewLocator.AddNamespaceMapping("", ".Cameras");
+                            OnCanvasPreviewSymbol = new OnPreviewCameraViewModel(vm, _eventAggregator);
+                            OnCanvasPreviewSymbol.Activate();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+
+                Debug.WriteLine($"Raised Exception in OnActivePreviewSymbolMessageModel : {ex.Message}");
+                return Task.CompletedTask;
+            }
+            finally
+            {
+                
+            }
+
         }
 
         public Task HandleAsync(SymbolContentUpdateMessageModel message, CancellationToken cancellationToken)
         {
-            if(OnCanvasPreviewSymbolViewModel != null)
-                OnCanvasPreviewSymbolViewModel.Update();
+            if(OnCanvasPreviewSymbol != null)
+                OnCanvasPreviewSymbol.Update();
             
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(ClearPreviewSymbolMessageModel message, CancellationToken cancellationToken)
         {
-            OnCanvasPreviewSymbolViewModel.Deactivate();
-            OnCanvasPreviewSymbolViewModel = null;
+            OnCanvasPreviewSymbol?.Deactivate();
+            OnCanvasPreviewSymbol = null;
             return Task.CompletedTask;
         }
         #endregion
@@ -194,10 +296,12 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         {
             await _eventAggregator.PublishOnCurrentThreadAsync(new OpenProgressPopupMessageModel(), cancellationToken);
             //Debug.WriteLine($"[{DateTime.Now.ToString("yyyy-mm-dd hh:mm:ss.ffff")}] MapEntityUpdate started...");
-            CanvasMapViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasMapViewModel[mapNumber], cancellationToken);
-            CanvasControllerViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasControllerViewModel[mapNumber], cancellationToken);
-            //CanvasSensorViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasSensorViewModel[mapNumber], cancellationToken);
-            //CanvasCameraViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasCameraViewModel[mapNumber], cancellationToken);
+            await Task.Delay(500);
+
+            CanvasMapViewModel = await Task.Run(() => _canvasMapEntityProvider?.MapCanvasMapViewModel[mapNumber], cancellationToken);
+            CanvasControllerViewModel = await Task.Run(() => _canvasMapEntityProvider?.MapCanvasControllerViewModel[mapNumber], cancellationToken);
+            CanvasSensorViewModel = await Task.Run(() => _canvasMapEntityProvider?.MapCanvasSensorViewModel[mapNumber], cancellationToken);
+            CanvasCameraViewModel = await Task.Run(() => _canvasMapEntityProvider?.MapCanvasCameraViewModel[mapNumber], cancellationToken);
             //CanvasGroupDetectViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasGroupDetectViewModel[mapNumber], cancellationToken);
             //CanvasGroupFaultViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasGroupFaultViewModel[mapNumber], cancellationToken);
             //CanvasGroupLabelViewModel = await Task.Run(() => _canvasMapEntityProvider.MapCanvasGroupLabelViewModel[mapNumber], cancellationToken);
@@ -207,6 +311,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         }
         #endregion
         #region - Properties -
+
+        #region - SuppressedCode-
+        /*private OnCanvasPreviewSymbolViewModel _onCanvasPreviewSymbolViewModel;
         public OnCanvasPreviewSymbolViewModel OnCanvasPreviewSymbolViewModel
         {
             get { return _onCanvasPreviewSymbolViewModel; }
@@ -214,10 +321,21 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             {
                 _onCanvasPreviewSymbolViewModel = value;
                 NotifyOfPropertyChange(() => OnCanvasPreviewSymbolViewModel);
+            }
+        }*/
+        #endregion
 
+        private OnPreviewBase _onCanvasPreviewSymbol;
+
+        public OnPreviewBase OnCanvasPreviewSymbol
+        {
+            get { return _onCanvasPreviewSymbol; }
+            set 
+            { 
+                _onCanvasPreviewSymbol = value;
+                NotifyOfPropertyChange(() => OnCanvasPreviewSymbol);
             }
         }
-
 
         public CanvasMapViewModel CanvasMapViewModel
         {
@@ -238,6 +356,28 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
                 NotifyOfPropertyChange(() => CanvasControllerViewModel);
             }
         }
+
+        public CanvasSensorViewModel CanvasSensorViewModel
+        {
+            get { return _canvasSensorViewModel; }
+            set 
+            { 
+                _canvasSensorViewModel = value;
+                NotifyOfPropertyChange(() => CanvasSensorViewModel);
+            }
+        }
+
+
+        public CanvasCameraViewModel CanvasCameraViewModel
+        {
+            get { return _canvasCameraViewModel; }
+            set 
+            { 
+                _canvasCameraViewModel = value;
+                NotifyOfPropertyChange(() => CanvasCameraViewModel);
+            }
+        }
+
 
         public bool IsVisible
         {
@@ -269,7 +409,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             }
         }
 
-        private MapContentControlViewModel _selectedMap;
 
         public MapContentControlViewModel SelectedMap
         {
@@ -289,10 +428,13 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
 
         #endregion
         #region - Attributes -
-        private OnCanvasPreviewSymbolViewModel _onCanvasPreviewSymbolViewModel;
+        
         private MapProvider _mapProvider;
         private ControllerProvider _controllerProvider;
+        private MapContentControlViewModel _selectedMap;
         private SymbolControllerProvider _symbolControllerProvider;
+        private SymbolSensorProvider _symbolSensorProvider;
+        private SymbolCameraProvider _symbolCameraProvider;
         private CanvasMapEntityProvider _canvasMapEntityProvider;
         private bool _isVisible;
 
@@ -302,6 +444,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
 
         private CanvasMapViewModel _canvasMapViewModel;
         private CanvasControllerViewModel _canvasControllerViewModel;
+        private CanvasSensorViewModel _canvasSensorViewModel;
+        private CanvasCameraViewModel _canvasCameraViewModel;
 
 
         #endregion

@@ -32,31 +32,30 @@
                         <ContentControl cal:View.Model="{Binding CanvasControllerViewModel,  UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding CanvasControllerViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         </ContentControl>
+                        <ContentControl cal:View.Model="{Binding CanvasSensorViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasSensorViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
+                        <ContentControl cal:View.Model="{Binding CanvasCameraViewModel,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding CanvasCameraViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </ContentControl>
                         <!--
                                         Visibility="{Binding CanvasMapViewModel.EntityProvider.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
                         <ContentControl cal:View.Model="{Binding CanvasGroupFaultViewModel,  UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding CanvasGroupFaultViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         </ContentControl>
 
-                        <ContentControl cal:View.Model="{Binding CanvasCameraViewModel,  UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding CanvasCameraViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        </ContentControl>
 
                         <ContentControl cal:View.Model="{Binding CanvasGroupDetectViewModel,  UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding CanvasGroupDetectViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         </ContentControl>
 
-                        <ContentControl cal:View.Model="{Binding CanvasSensorViewModel,  UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding CanvasSensorViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        </ContentControl>
 
                         <ContentControl cal:View.Model="{Binding CanvasGroupLabelViewModel,  UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding CanvasGroupLabelViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         </ContentControl>
                         -->
-                        <ContentControl 
-                            cal:View.Model="{Binding OnCanvasPreviewSymbolViewModel,  UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding OnCanvasPreviewSymbolViewModel.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <ContentControl cal:View.Model="{Binding OnCanvasPreviewSymbol,  UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding OnCanvasPreviewSymbol.Visibility, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Grid>
                 </ContentPresenter.Content>
             </ContentPresenter>

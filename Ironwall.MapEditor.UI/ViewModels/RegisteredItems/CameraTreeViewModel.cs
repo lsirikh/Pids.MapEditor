@@ -17,9 +17,11 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 {
     public sealed class CameraTreeViewModel
         : TreeBaseViewModel<SymbolContentControlViewModel>
-        //, IHandle<CameraTreeAddMessageModel>
-        //, IHandle<CameraTreeRemoveMessageModel>
-        //, IHandle<CameraContentUpdateMessageModel>
+
+        , IHandle<DeviceTreeSelectedMessageModel>
+        //, IHandle<CameraTreeSelectedMessageModel>
+        , IHandle<GroupTreeSelectedMessageModel>
+
         , IHandle<SymbolContentUpdateMessageModel>
     {
         #region - Ctors -
@@ -97,16 +99,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 item.Description = viewModel.NameDevice;
                 item.Used = viewModel.Used;
                 item.Visibility = viewModel.Visibility;
+
+                item.IsSelected = true;
+                SelectedItem = item;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Raised Exception in UpdateTree : {ex.Message}");
                 return;
             }
-            finally
-            {
-                NotifyOfPropertyChange(() => Items);
-            }
+            
         }
         
         /// <summary>
@@ -115,18 +117,15 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// </summary>
         protected override void UpdateSelectedItem()
         {
-            if (SelectedItem == null)
-                return;
-
-            base.UpdateSelectedItem();
-
+           
             var viewModel = _provider.CollectionEntity
             .Where(item => TreeManager.SetTreeCameraId(item.Id) == SelectedItem.Id)
             .SingleOrDefault();
 
             if (viewModel != null)
                 _eventAggregator.PublishOnUIThreadAsync(new OpenCameraPropertyMessageModel(viewModel));
-            
+
+            _eventAggregator.PublishOnUIThreadAsync(new CameraTreeSelectedMessageModel());
         }
 
         #endregion
@@ -146,6 +145,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 UpdateTree(message?.ViewModel);
             
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(DeviceTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
+        }
+
+        public async Task HandleAsync(GroupTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
         }
         #endregion
         #region - Properties -

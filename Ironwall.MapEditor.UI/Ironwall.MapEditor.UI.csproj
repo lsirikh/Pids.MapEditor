@@ -230,7 +230,9 @@
     <Compile Include="DataProviders\GroupProvider.cs" />
     <Compile Include="DataProviders\MapProvider.cs" />
     <Compile Include="DataProviders\SensorProvider.cs" />
+    <Compile Include="DataProviders\SymbolCameraProvider.cs" />
     <Compile Include="DataProviders\SymbolControllerProvider.cs" />
+    <Compile Include="DataProviders\SymbolSensorProvider.cs" />
     <Compile Include="Helpers\DataConvertionHelper.cs" />
     <Compile Include="Helpers\DeviceConverterHelper.cs" />
     <Compile Include="Helpers\ProviderManager.cs" />
@@ -258,7 +260,7 @@
     <Compile Include="Models\Messages\Process\GroupTreeMessageModel.cs" />
     <Compile Include="Models\Messages\Process\SensorTreeMessageModel.cs" />
     <Compile Include="Models\Messages\Process\SymbolTreeMessageModel.cs" />
-    <Compile Include="Models\Messages\Process\UpdateSymbolControllerMessageModel.cs" />
+    <Compile Include="Models\Messages\Process\SymbolMessageModel.cs" />
     <Compile Include="Models\Messages\Sections\ClearPreviewSymbolMessageModel.cs" />
     <Compile Include="Models\Messages\Sections\OnActivePreviewSymbolMessageModel.cs" />
     <Compile Include="Models\Messages\Sections\OpenPropertyMessageModel.cs" />
@@ -269,8 +271,10 @@
     <Compile Include="ModelValidators\SymbolModelValidator.cs" />
     <Compile Include="Services\IInsertTreeItemService.cs" />
     <Compile Include="Services\InsertTreeItemService.cs" />
+    <Compile Include="ViewModels\Canvases\CanvasCameraViewModel.cs" />
     <Compile Include="ViewModels\Canvases\CanvasControllerViewModel.cs" />
     <Compile Include="ViewModels\Canvases\CanvasMapViewModel.cs" />
+    <Compile Include="ViewModels\Canvases\CanvasSensorViewModel.cs" />
     <Compile Include="ViewModels\ComboBoxSource\ComboBoxViewModel.cs" />
     <Compile Include="ViewModels\Conductors\ConductorControlViewModel.cs" />
     <Compile Include="ViewModels\Conductors\IConductorControlViewModel.cs" />
@@ -314,12 +318,26 @@
     <Compile Include="ViewModels\Sections\TopMenuSectionViewModel.cs" />
     <Compile Include="ViewModels\Symbols\ISymbolViewMdoelBase.cs" />
     <Compile Include="ViewModels\Symbols\OnCanvasPreviewSymbolViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\OnPreviewBase.cs" />
+    <Compile Include="ViewModels\Symbols\OnPreviewCameraViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\OnPreviewControllerViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\OnPreviewGroupViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\OnPreviewSensorViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\SymbolBase.cs" />
+    <Compile Include="ViewModels\Symbols\SymbolCameraViewModel.cs" />
     <Compile Include="ViewModels\Symbols\SymbolControllerViewModel.cs" />
+    <Compile Include="ViewModels\Symbols\SymbolSensorViewModel.cs" />
+    <Compile Include="Views\Canvases\CanvasCameraView.xaml.cs">
+      <DependentUpon>CanvasCameraView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Canvases\CanvasControllerView.xaml.cs">
       <DependentUpon>CanvasControllerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Canvases\CanvasMapView.xaml.cs">
       <DependentUpon>CanvasMapView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Canvases\CanvasSensorView.xaml.cs">
+      <DependentUpon>CanvasSensorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Conductors\ConductorControlView.xaml.cs">
       <DependentUpon>ConductorControlView.xaml</DependentUpon>
@@ -417,11 +435,32 @@
     <Compile Include="Views\Sections\TopMenuSectionView.xaml.cs">
       <DependentUpon>TopMenuSectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Symbols\OnCanvasPreviewSymbolView.xaml.cs">
+    <Compile Include="Views\Symbols\Cameras\OnCanvasPreviewSymbolView.xaml.cs">
       <DependentUpon>OnCanvasPreviewSymbolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\Controllers\OnCanvasPreviewSymbolView.xaml.cs">
+      <DependentUpon>OnCanvasPreviewSymbolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\OnPreviewCameraView.xaml.cs">
+      <DependentUpon>OnPreviewCameraView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\OnPreviewControllerView.xaml.cs">
+      <DependentUpon>OnPreviewControllerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\OnPreviewGroupView.xaml.cs">
+      <DependentUpon>OnPreviewGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\OnPreviewSensorView.xaml.cs">
+      <DependentUpon>OnPreviewSensorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\SymbolCameraView.xaml.cs">
+      <DependentUpon>SymbolCameraView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Symbols\SymbolControllerView.xaml.cs">
       <DependentUpon>SymbolControllerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Symbols\SymbolSensorView.xaml.cs">
+      <DependentUpon>SymbolSensorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -460,7 +499,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\camera.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\CM_NetFramework_Icon64.ico" />
   </ItemGroup>
@@ -482,11 +523,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Canvases\CanvasCameraView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Canvases\CanvasControllerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Canvases\CanvasMapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Canvases\CanvasSensorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -510,11 +559,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Symbols\OnCanvasPreviewSymbolView.xaml">
+    <Page Include="Views\Symbols\Cameras\OnCanvasPreviewSymbolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\Controllers\OnCanvasPreviewSymbolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\OnPreviewCameraView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\OnPreviewControllerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\OnPreviewGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\OnPreviewSensorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\SymbolCameraView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Symbols\SymbolControllerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Symbols\SymbolSensorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

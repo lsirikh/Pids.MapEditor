@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Ironwall.MapEditor.UI.Views.Symbols.SymbolCameraView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             mc:Ignorable="d"
+             d:DesignHeight="800"
+             d:DesignWidth="800">
+
+    <Viewbox Stretch="UniformToFill"
+             Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=LostFocus
+        , Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Image  Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                            Source="/Ironwall.MapEditor.UI;component/Resources/Images/camera.png">
+                        <Image.ToolTip>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0">
+                                    <TextBlock.Text>
+                                <Binding Path="NameDevice"
+                                         StringFormat="{}{0}"
+                                         UpdateSourceTrigger="LostFocus" />
+
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </Image.ToolTip>
+                    </Image>
+    </Viewbox>
+    
+    <!--
+    <Viewbox Stretch="UniformToFill"
+             Visibility="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <ContentPresenter>
+            <ContentPresenter.Content>
+                <Canvas Width="{Binding Width, Mode=TwoWay}"
+                        Height="{Binding Height, Mode=TwoWay}">
+
+                    <Image  Canvas.Left="0"
+                            Canvas.Top="0"
+                            Width="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Height="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Source="/Ironwall.MapEditor.UI;component/Resources/Images/camera.png">
+                        <Image.ToolTip>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}">
+                                            <Binding Path="NameDevice" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </Image.ToolTip>
+                    </Image>
+                </Canvas>
+            </ContentPresenter.Content>
+        </ContentPresenter>
+    </Viewbox>
+    -->
+</UserControl>

@@ -20,12 +20,11 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 {
     public sealed class DeviceTreeViewModel
         : TreeBaseViewModel<SymbolContentControlViewModel>
-        //, IHandle<ControllerTreeAddMessageModel>
-        //, IHandle<ControllerTreeRemoveMessageModel>
-        //, IHandle<ControllerContentUpdateMessageModel>
-        //, IHandle<SensorTreeAddMessageModel>
-        //, IHandle<SensorTreeRemoveMessageModel>
-        //, IHandle<SensorContentUpdateMessageModel>
+
+        //, IHandle<DeviceTreeSelectedMessageModel>
+        , IHandle<CameraTreeSelectedMessageModel>
+        , IHandle<GroupTreeSelectedMessageModel>
+
         , IHandle<SymbolContentUpdateMessageModel>
     {
         #region - Ctors -
@@ -174,129 +173,48 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 item.Description = viewModel.NameDevice;
                 item.Used = viewModel.Used;
                 item.Visibility = viewModel.Visibility;
+
+                SelectedItem = item;
+                item.IsSelected = true;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Raised Exception in UpdateTree : {ex.Message}");
                 return;
             }
-            finally
-            {
-                NotifyOfPropertyChange(() => Items);
-            }
+            
         }
 
         private void MoveSensorNode(SymbolContentControlViewModel viewModel)
         {
-            var itemId = TreeManager.SetTreeSensorId(viewModel.Id);
-            var item = TreeManager.GetMatchedId(Items, itemId);
-            //var prevParent = Items.FirstOrDefault().Children.Where(t => t.Id == (item.ParentTree as TreeContentControlViewModel).Id).FirstOrDefault();
-            var prevParent = item.ParentTree as TreeContentControlViewModel;
-            ///기존 부모 Tree에서 삭제
-            prevParent.Children.Remove(item);
-            var newParent = Items.FirstOrDefault().Children.Where(t => t.Name == viewModel.IdController.ToString()).FirstOrDefault();
-            item.ParentTree = newParent;
-            
-            if (newParent == null)
-                return;
+            try
+            {
+                var itemId = TreeManager.SetTreeSensorId(viewModel.Id);
+                var item = TreeManager.GetMatchedId(Items, itemId);
+                //var prevParent = Items.FirstOrDefault().Children.Where(t => t.Id == (item.ParentTree as TreeContentControlViewModel).Id).FirstOrDefault();
+                var prevParent = item.ParentTree as TreeContentControlViewModel;
+                ///기존 부모 Tree에서 삭제
+                prevParent.Children.Remove(item);
+                var newParent = Items.FirstOrDefault().Children.Where(t => t.Name == viewModel.IdController.ToString()).FirstOrDefault();
+                item.ParentTree = newParent;
 
-            ///신규 부모 Tree에 추가
-            newParent.Children.Add(item);
+                if (newParent == null)
+                    return;
+
+                ///신규 부모 Tree에 추가
+                newParent.Children.Add(item);
+
+                item.IsSelected = true;
+                SelectedItem = item;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Raised Exception in MoveSensorNode : {ex.Message}");
+                return;
+            }
         }
 
-        /*/// <summary>
-        /// Tree에 노드 등록
-        /// </summary>
-        /// <param name="parentTree">등록할 노드의 부모노드</param>
-        /// <param name="childTree">등록할 Tree Node</param>
-        /// <returns>boolean Type</returns>
-        protected override bool AddTree(TreeContentControlViewModel parent, TreeContentControlViewModel child)
-        {
-            return base.AddTree(parent, child);
-        }*/
-
-        /// <summary>
-        /// Tree에 노드 삭제
-        /// </summary>
-        /// <param name="node">등록할 Tree Node</param>
-        /// <returns>boolean Type</returns>
-        /*protected override bool RemoveTree(TreeContentControlViewModel node)
-        {
-            var nodeId = node.Id;
-            var nodeType = node.DataType;
-
-            if (base.RemoveTree(node))
-            {
-                ///제어기
-                if (nodeType == EnumDataType.Controller)
-                {
-                    ///provider에 등록된 아이템 찾기`
-                    ///
-                    RemoveControllerInProvider(nodeId);
-
-                    RemoveSensorsInProvider(nodeId);
-                }
-                else
-                {
-                    RemoveSensorsInProvider(nodeId);
-                }
-
-                ///센서
-                return true;
-            }
-            else
-                return false;
-
-        }*/
-
-        /// <summary>
-        /// RemoveControllerInProvider - Provider에 등록된 ControllerContetntViewModel을 삭제하는 메소드
-        /// </summary>
-        /// <param name="id">삭제할 Controller ID</param>
-        /*private void RemoveControllerInProvider(string id)
-        {
-            if (_controllerProvider.Count() > 0)
-            {
-                ///id와 동일한 값을 갖는 Controller 찾기
-                var contentControlViewModel = _controllerProvider?
-                    .Where(t => TreeManager.SetTreeControllerId(t.Id) == id)?.FirstOrDefault();
-
-                ///MapContentControlViewModel 비활성화
-                contentControlViewModel?.DeactivateAsync(true);
-
-                ///provider에서 해당 아이템 제거
-                _controllerProvider.Remove(contentControlViewModel);
-                ///메시징
-                _eventAggregator.PublishOnUIThreadAsync(new ControllerContentUpdateMessageModel());
-            }
-        }*/
-
-        /// <summary>
-        /// RemoveSensorsInProvider - Provider에 등록된 SensorContentViewModel을 삭제하는 메소드
-        /// </summary>
-        /// <param name="id">삭제할 Sensor Id</param>
-        /*private void RemoveSensorsInProvider(string id)
-        {
-            if (_sensorProvider.Count() > 0)
-            {
-                ///id와 동일한 값을 갖는 Sensor 찾기
-                var sensors = _sensorProvider?
-                    .Where(t => TreeManager.SetTreeSensorId(t.Id) == id)
-                    .Select(t => t).ToList();
-
-                ///매칭된 아이템 수량
-                var count = sensors.Count();
-                ///매칭된 아이템을 Deactivate 및 provider에서 제거
-                foreach (var sensor in sensors)
-                {
-                    sensor.DeactivateAsync(true);
-                    _sensorProvider.Remove(sensor);
-                }
-                ///메시징
-                if (count > 0)
-                    _eventAggregator.PublishOnUIThreadAsync(new SensorContentUpdateMessageModel());
-            }
-        }*/
+       
         /// <summary>
         /// RemoveSensorsInProvider - (Method Overriding) Controller Id를 통해 Provider 속해있는 Sensor를 모두 삭제하는 메소드
         /// </summary>
@@ -330,11 +248,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// </summary>
         protected override void UpdateSelectedItem()
         {
-            if (SelectedItem == null)
-                return;
-
-            base.UpdateSelectedItem();
-            
             ///DataType을 이용한 Controller, Sensor 구분
             if (SelectedItem.DataType == EnumDataType.Controller)
             {
@@ -343,7 +256,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 .SingleOrDefault();
 
                 if (viewModel != null)
+                {
                     _eventAggregator.PublishOnUIThreadAsync(new OpenControllerPropertyMessageModel(viewModel));
+                }
             }
             else
             {
@@ -354,7 +269,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 if (viewModel != null)
                     _eventAggregator.PublishOnUIThreadAsync(new OpenSensorPropertyMessageModel(viewModel));
             }
-            
+
+            _eventAggregator.PublishOnUIThreadAsync(new DeviceTreeSelectedMessageModel());
+
         }
         #endregion
         #region - Binding Methods -
@@ -362,173 +279,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         #region - Processes -
         #endregion
         #region - IHanldes -
-        /// <summary>
-        /// Tree Node의 상위(Root)에서 Contenxt Menu를 활용한 추가 이벤트 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(ControllerTreeAddMessageModel message, CancellationToken cancellationToken)
-        {
-            //Get ViewModel
-            var viewModel = message.ViewModel;
-
-            //Get idController
-            var id = _controllerProvider.GetMaxId() + 1;
-            var idController = ProviderManager.GetMaxControllerID(_controllerProvider) + 1;
-
-            //*************************ControllerContentControlViewModel 생성, 활성화 및 추가****************************
-            var contentControlViewModel = new ControllerContentControlViewModel(id, "Untitle", (int)EnumDeviceType.Controller, $"{idController}", idController, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, false, false, _eventAggregator, _controllerProvider, _mapProvider) { DisplayName = $"{idController} {EnumDataType.Controller.ToString()}" };
-            //MapContentControlViewModel 활성화
-            contentControlViewModel.ActivateAsync();
-            ///Provider에 데이터 추가
-            _controllerProvider.Add(contentControlViewModel);
-            //***********************************************************************************************************
-
-            //초기화된 TreeContentControlViewModel인 경우
-            if (viewModel.Id == TreeManager.SetTreeControllerId(0))
-            {
-                //트리 노드 중 최대 ID 값 보다 1증가한 값을 ID로 할당
-                viewModel.Id = TreeManager.SetTreeControllerId(id);
-                viewModel.Name = contentControlViewModel.IdController.ToString();
-                viewModel.Description = contentControlViewModel.NameDevice;
-                viewModel.DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{idController} {EnumDataType.Controller.ToString()}";
-            }
-            //AddTree Tree Node 추가 프로세스
-            AddTree(viewModel.ParentTree as TreeContentControlViewModel, viewModel);
-            
-            return Task.CompletedTask;
-        }*/
-
-        /*private void RefreshTree(TreeContentControlViewModel viewModel)
-        {
-            
-            if(viewModel.DataType == EnumDataType.Controller)
-            {
-                ///해당 컨트롤러에 속하는 센서를 찾아서 등록
-                ///****************TreeContetnControlViewMdoel 생성************************
-                var sensorList = _sensorProvider.Select(sensor => new TreeContentControlViewModel(TreeManager.SetTreeSensorId(sensor.Id), sensor.IdSensor.ToString(), sensor.NameDevice, EnumTreeType.LEAF, sensor.Used, sensor.Visibility, viewModel, EnumDataType.Sensor, _eventAggregator) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{sensor.IdSensor} {EnumDataType.Sensor.ToString()}" });
-
-                sensorList.ToList().ForEach(item => AddTree(item.ParentTree as TreeContentControlViewModel, item));
-
-            }
-            else if (viewModel.DataType == EnumDataType.Sensor)
-            {
-                ///1.해당 트리노드를 트리에서 찾는다.
-                ///2.찾은 노드의 부모노드의 정보와 수정된 부모노드 정보를확인한다.
-                ///3-1.맞는 경우는 그대로 유지
-                ///3-2.맞지 않는 경우는 해당 부모노드로 트리노드를 이동한다.
-                ///     이동방법
-                ///     1. 기존트리 노드를 새로운 위치에 Add
-                ///     2. 기존트리의 노드는 Remove
-                ///     
-                var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-            }
-            else
-            {
-
-            }
-        }*/
-
-        /// <summary>
-        /// AddController Panel을 활용한 Controller Tree Node의 추가(Add) 요청 이벤트 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(ControllerContentUpdateMessageModel message, CancellationToken cancellationToken)
-        {
-            InitialTree();
-            return Task.CompletedTask;
-        }*/
-        /// <summary>
-        /// 선택된 Tree Node를 삭제하기 위한 요청 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(ControllerTreeRemoveMessageModel message, CancellationToken cancellationToken)
-        {
-            ///최초 브랜치가 DeviceRoot이면,
-            ///DeviceTreeViewModel에서 처리
-
-            var firstBranch = TreeManager.GetFirstBranch(message.ViewModel);
-            if (firstBranch.DataType == EnumDataType.DeviceRoot)
-                RemoveTree(message.ViewModel);
-
-            return Task.CompletedTask;
-        }*/
-        /// <summary>
-        /// Tree Node의 상위(Branch)에서 Contenxt Menu를 활용한 추가 이벤트 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(SensorTreeAddMessageModel message, CancellationToken cancellationToken)
-        {
-            //Get ViewModel
-            var viewModel = message.ViewModel;
-
-            //Get ParentNode 
-            var parentNode = viewModel.ParentTree as TreeContentControlViewModel;
-
-            if (parentNode == null)
-                return Task.CompletedTask;
-
-            //Get idSensor
-            var id = _sensorProvider.GetMaxId() + 1;
-            var idController = int.Parse(parentNode.Name);
-            var idSensor = ProviderManager.GetMaxSensorID(_sensorProvider, idController) + 1;
-
-            //****************SensorContentControlViewModel 생성, 활성화 및 추가*************************
-            var contentControlViewModel = new SensorContentControlViewModel(id, "Untitle", (int)EnumDeviceType.Fence, $"{idSensor}", idController, idSensor, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, false, false, _eventAggregator, _sensorProvider, _groupProvider, _controllerProvider, _mapProvider) { DisplayName = $"{idSensor} {EnumDataType.Sensor.ToString()}" };
-            //SensorContentControlViewModel 활성화
-            contentControlViewModel.ActivateAsync();
-            ///Provider에 데이터 추가
-            _sensorProvider.Add(contentControlViewModel);
-            //*******************************************************************************************
-
-            //초기화된 TreeContentControlViewModel인 경우
-            if (viewModel.Id == TreeManager.SetTreeSensorId(0))
-            {
-                //트리 노드 중 최대 ID 값 보다 1증가한 값을 ID로 할당
-                viewModel.Id = TreeManager.SetTreeSensorId(id);
-                viewModel.Name = contentControlViewModel.IdSensor.ToString();
-                viewModel.Description = contentControlViewModel.NameDevice;
-                viewModel.DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{idSensor} {EnumDataType.Sensor.ToString()}";
-            }
-            //Add Tree Node
-            AddTree(parentNode, viewModel);
-            
-            return Task.CompletedTask;
-        }*/
-        /// <summary>
-        /// AddSensor Panel을 활용한 Sensor Tree Node의 추가(Add) 요청 이벤트 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(SensorContentUpdateMessageModel message, CancellationToken cancellationToken)
-        {
-            InitialTree();
-            return Task.CompletedTask;
-        }*/
-        /// <summary>
-        /// Sensor Tree Node의 삭제 요청 이벤트 수신 메소드
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /*public Task HandleAsync(SensorTreeRemoveMessageModel message, CancellationToken cancellationToken)
-        {
-            ///최초 브랜치가 DeviceRoot이면,
-            ///DeviceTreeViewModel에서 처리
-
-            var firstBranch = TreeManager.GetFirstBranch(message.ViewModel);
-            if (firstBranch.DataType == EnumDataType.DeviceRoot)
-                RemoveTree(message.ViewModel);
-            return Task.CompletedTask;
-        }*/
+        
         /// <summary>
         /// 등록된 Tree Node의 세부내역 변경 요청 이벤트 수신 메소드 
         /// </summary>
@@ -546,6 +297,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 UpdateTree(message?.ViewModel);
 
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(CameraTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items) );
+        }
+
+        public async Task HandleAsync(GroupTreeSelectedMessageModel message, CancellationToken cancellationToken)
+        {
+            await Task.Run(() => TreeManager.SetTreeUnselected(Items) );
         }
         #endregion
         #region - Properties -
