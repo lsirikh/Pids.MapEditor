@@ -94,6 +94,7 @@ namespace Ironwall.MapEditor.UI
                 builder.RegisterType<SensorProvider>().SingleInstance();
                 builder.RegisterType<ControllerProvider>().SingleInstance();
                 builder.RegisterType<GroupProvider>().SingleInstance();
+                builder.RegisterType<GroupSymbolProvider>().SingleInstance();
                 builder.RegisterType<CameraProvider>().SingleInstance();
 
                 builder.RegisterType<CanvasMapEntityProvider>().SingleInstance();
@@ -108,6 +109,7 @@ namespace Ironwall.MapEditor.UI
                 builder.RegisterType<MapTreeViewModel>().SingleInstance();
                 builder.RegisterType<DeviceTreeViewModel>().SingleInstance();
                 builder.RegisterType<GroupTreeViewModel>().SingleInstance();
+                builder.RegisterType<GroupSymbolTreeViewModel>().SingleInstance();
                 builder.RegisterType<CameraTreeViewModel>().SingleInstance();
 
 

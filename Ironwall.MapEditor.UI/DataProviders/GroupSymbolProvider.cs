@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ironwall.MapEditor.UI.DataProviders
 {
-    public sealed class GroupProvider
+    public sealed class GroupSymbolProvider
         : EntityCollectionProvider<SymbolContentControlViewModel>
     {
         #region - Ctors -
@@ -16,21 +16,10 @@ namespace Ironwall.MapEditor.UI.DataProviders
         #region - Implementation of Interface -
         #endregion
         #region - Overrides -
-        
         #endregion
         #region - Binding Methods -
         #endregion
         #region - Processes -
-        public int GetMaxId()
-        {
-            var count = 0;
-            CollectionEntity.Select(t => t).ToList().ForEach(t =>
-            {
-                if (t.Id > count)
-                    count = t.Id;
-            });
-            return count;
-        }
         #endregion
         #region - IHanldes -
         #endregion
@@ -38,11 +27,5 @@ namespace Ironwall.MapEditor.UI.DataProviders
         #endregion
         #region - Attributes -
         #endregion
-
-
-
-
-        
-
     }
 }

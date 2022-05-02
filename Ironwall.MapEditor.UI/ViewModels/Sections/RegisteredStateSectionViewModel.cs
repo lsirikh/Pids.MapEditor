@@ -25,6 +25,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             //, SensorTreeViewModel sensorTreeViewModel
             , DeviceTreeViewModel deviceTreeViewModel
             , GroupTreeViewModel groupTreeViewModel
+            , GroupSymbolTreeViewModel groupSymbolTreeViewModel
             , CameraTreeViewModel cameraTreeViewModel
             )
         {
@@ -40,6 +41,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             //SensorTreeViewModel = sensorTreeViewModel;
             DeviceTreeViewModel = deviceTreeViewModel;
             GroupTreeViewModel = groupTreeViewModel;
+            GroupSymbolTreeViewModel = groupSymbolTreeViewModel;
             CameraTreeViewModel = cameraTreeViewModel;
         }
 
@@ -58,6 +60,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
             //SensorTreeViewModel.ActivateAsync();
             DeviceTreeViewModel.ActivateAsync();
             GroupTreeViewModel.ActivateAsync();
+            GroupSymbolTreeViewModel.ActivateAsync();
             CameraTreeViewModel.ActivateAsync();
             return Task.CompletedTask;
         }
@@ -73,6 +76,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Sections
         public MapTreeViewModel MapTreeViewModel { get; }
         public DeviceTreeViewModel DeviceTreeViewModel { get; }
         public GroupTreeViewModel GroupTreeViewModel { get; }
+        public GroupSymbolTreeViewModel GroupSymbolTreeViewModel { get; }
         public CameraTreeViewModel CameraTreeViewModel { get; }
 
         private TreeContentControlViewModel _selectedMap;

@@ -172,34 +172,7 @@ namespace Ironwall.MapEditor.Ui.Helpers
             }
         }
 
-        /*public static TreeContentControlViewModel GetMatchedIdWithDataType(ObservableCollection<TreeContentControlViewModel> collection, int id, string dataType)
-        {
-            TreeContentControlViewModel searchTree = null;
-
-            TreeRecursiveSearchId(collection, id, dataType);
-
-            return searchTree;
-
-            void TreeRecursiveSearchId(ObservableCollection<TreeContentControlViewModel> collection, int id, string dataType)
-            {
-                //입력 파라미터 collection 검증
-                if (!(collection != null && collection.Count() > 0))
-                {
-                    return;
-                }
-
-                for (int i = 0; i < collection.Count(); i++)
-                {
-                    if (collection[i].Children.Count() > 0)
-                    {
-                        TreeRecursiveSearchId(collection[i].Children, id, dataType);
-                    }
-                    ///ID 및 DataType까지 일치해야 원하는 TreeContentControlViewModel임
-                    if (collection[i].Id == id && collection[i].DataType == dataType)
-                        searchTree = collection[i];
-                }
-            }
-        }*/
+        
         public static TreeContentControlViewModel GetControllerTreeInGroup(ObservableCollection<TreeContentControlViewModel> collection, string id)
         {
             var tree = GetMatchedId(collection, id);
@@ -445,6 +418,25 @@ namespace Ironwall.MapEditor.Ui.Helpers
         public static int GetGroupProviderId(string id)
         {
             return int.Parse(id.Replace("G", ""));
+        }
+
+        /// <summary>
+        /// GroupSymbol Tree에 활용되는 Id로 변경
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string SetTreeGroupSymbolId(int id)
+        {
+            return $"B{id}";
+        }
+        /// <summary>
+        /// GroupSymbolProvider에서 활용하는 Id로 변경
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static int GetGroupSymbolProviderId(string id)
+        {
+            return int.Parse(id.Replace("B", ""));
         }
     }
 }

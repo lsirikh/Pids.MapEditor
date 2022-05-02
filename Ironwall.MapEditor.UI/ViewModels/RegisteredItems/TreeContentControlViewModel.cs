@@ -24,6 +24,14 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         , ITreeContentControlViewModel
     {
         #region - Ctors -
+        public TreeContentControlViewModel()
+        {
+            _eventAggregator = IoC.Get<IEventAggregator>();
+
+            DisplayName = "Untitled Tree Node";
+            Model = new TreeModel();
+            Children = new TrulyObservableCollection<TreeContentControlViewModel>();
+        }
         public TreeContentControlViewModel(IEventAggregator eventAggregator = null)
         {
             _eventAggregator = eventAggregator;
@@ -31,7 +39,6 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             DisplayName = "Untitled Tree Node";
             Model = new TreeModel();
             Children = new TrulyObservableCollection<TreeContentControlViewModel>();
-
         }
 
         public TreeContentControlViewModel(string id, string name, string description, EnumTreeType type, bool used, bool visibility, object parentTree, EnumDataType dataType, IEventAggregator eventAggregator = null)
@@ -69,7 +76,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             Update();
         }
 
-        public TreeContentControlViewModel(string id, string name, string description, EnumTreeType type, bool used, bool visibility, object parentTree, EnumDataType dataType, IEventAggregator eventAggregator = null, MapProvider mapProvider = null, GroupProvider groupProvider = null, ControllerProvider controllerProvider = null, SensorProvider sensorProvider = null)
+        public TreeContentControlViewModel(string id, string name, string description, EnumTreeType type, bool used, bool visibility, object parentTree, EnumDataType dataType, IEventAggregator eventAggregator = null, MapProvider mapProvider = null, GroupProvider groupProvider = null,  ControllerProvider controllerProvider = null, SensorProvider sensorProvider = null)
         {
             DisplayName = name;
             _eventAggregator = eventAggregator;
@@ -77,6 +84,23 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             _sensorProvider = sensorProvider;
             _controllerProvider = controllerProvider;
             _groupProvider = groupProvider;
+            _mapProvider = mapProvider;
+
+            Model = new TreeModel(id, name, description, type, used, visibility, parentTree, dataType);
+            Children = new TrulyObservableCollection<TreeContentControlViewModel>();
+            Update();
+        }
+
+        public TreeContentControlViewModel(string id, string name, string description, EnumTreeType type, bool used, bool visibility, object parentTree, EnumDataType dataType, IEventAggregator eventAggregator = null, MapProvider mapProvider = null, GroupProvider groupProvider = null, GroupSymbolProvider groupSymbolProvider = null, ControllerProvider controllerProvider = null, SensorProvider sensorProvider = null)
+        {
+            DisplayName = name;
+
+            _eventAggregator = eventAggregator;
+
+            _sensorProvider = sensorProvider;
+            _controllerProvider = controllerProvider;
+            _groupProvider = groupProvider;
+            _groupSymbolProvider = groupSymbolProvider;
             _mapProvider = mapProvider;
 
             Model = new TreeModel(id, name, description, type, used, visibility, parentTree, dataType);
@@ -228,9 +252,9 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         var map = _mapProvider.CollectionEntity?.FirstOrDefault();
                         var mapNumber = map != null ? map.MapNumber : 0;
 
-                        //1
+                        ///1
                         var contentControlViewModel = new GroupContentControlViewModel(id, nameArea.ToString(), (int)EnumDeviceType.NONE, nameArea.ToString(), 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, mapNumber, true, true, _eventAggregator, _groupProvider, _mapProvider) { DisplayName = $"{id} {EnumDataType.Group.ToString()}" };
-                        //2
+                        ///2
                         await contentControlViewModel?.ActivateAsync();
                         ///3
                         _groupProvider.Add(contentControlViewModel);
@@ -240,10 +264,12 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         await treeNode?.ActivateAsync();
                         ///6
                         viewModel.Children.Add(treeNode);
-                    }
-                    //await _eventAggregator?.PublishOnUIThreadAsync(new GroupTreeAddMessageModel(group));
-                    break;
 
+                        var treeSymbolNode = new TreeContentControlViewModel(TreeManager.SetTreeGroupId(id), contentControlViewModel.NameArea, contentControlViewModel.NameArea, EnumTreeType.BRANCH, true, true, viewModel, EnumDataType.Group, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{id} {EnumDataType.Group.ToString()}" };
+
+
+                    }
+                    break;
                 case EnumDataType.CameraRoot:
                     ///등록방법
                     ///1. TreeNode와 연동을 위한 CameraContentControlViewModel 생성
@@ -460,6 +486,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                         parentNode?.Children?.Remove(viewModel);
                         //6
                         await viewModel.DeactivateAsync(true);
+
                         ///7
                         //var symbolProvider = IoC.Get<SymbolGroupProvider>();
                         //var symbol = symbolProvider?.CollectionEntity?.Where(t => t.Id == contentControlViewModel.Id)?.FirstOrDefault();
@@ -470,6 +497,11 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                             symbol = null;
                             _eventAggregator?.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
                         }*/
+                    }
+                    break;
+                case EnumDataType.GroupSymbol:
+                    {
+
                     }
                     break;
                 case EnumDataType.Camera:
@@ -645,6 +677,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         private SensorProvider _sensorProvider;
         private ControllerProvider _controllerProvider;
         private GroupProvider _groupProvider;
+        private GroupSymbolProvider _groupSymbolProvider;
         #endregion
     }
 }

@@ -47,6 +47,8 @@
                             Value="Center" />
                     <Setter Property="Foreground"
                             Value="White" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Style>
             </TreeView.ItemContainerStyle>
 

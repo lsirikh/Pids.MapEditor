@@ -17,4 +17,9 @@ namespace Ironwall.MapEditor.UI.Models.Messages.Process
     public class CameraTreeSelectedMessageModel
     {
     }
+
+    public class GroupSymbolSelectedMessageModel
+    {
+
+    }
 }

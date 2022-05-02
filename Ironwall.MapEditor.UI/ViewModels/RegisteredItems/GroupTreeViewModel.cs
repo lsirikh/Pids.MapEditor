@@ -45,13 +45,18 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             , ControllerProvider controllerProvider
             , SensorProvider sensorProvider
             , MapProvider mapProvider
+            , GroupSymbolTreeViewModel groupSymbolTreeViewModel
             , IEventAggregator eventAggregator)
         {
+
+
             _groupProvider = groupProvider;
             _controllerProvider = controllerProvider;
             _sensorProvider = sensorProvider;
             _mapProvider = mapProvider;
             _eventAggregator = eventAggregator;
+
+            GroupSymbolTreeViewModel = groupSymbolTreeViewModel;
         }
         #endregion
         #region - Implementation of Interface -
@@ -67,13 +72,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             ///GroupRoot 생성
             ///Root가 null인경우 초기화
             ///****************TreeContetnControlViewMdoel 생성************************
-            AddTree(new TreeContentControlViewModel($"G{0}", "전체 그룹", "사이트 전체 그룹 구성", EnumTreeType.ROOT, true, true, null, EnumDataType.GroupRoot, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.ROOT.ToString()}]{0} {EnumDataType.GroupRoot.ToString()}" });
+            var root = new TreeContentControlViewModel($"G{0}", "전체 그룹", "사이트 전체 그룹 구성", EnumTreeType.ROOT, true, true, null, EnumDataType.GroupRoot, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.ROOT.ToString()}]{0} {EnumDataType.GroupRoot.ToString()}" };
+            AddTree(root);
 
-            ///Root는 Items의 첫 오브젝트를 할당
-            var root = Items.FirstOrDefault();
+            
             ///Root Node 활성화 상태 확인
             if (!Items.FirstOrDefault().IsActive)
                 await root.ActivateAsync();
+
+
+            //GroupSymbolTreeViewModel.AddTree(root);
         }
         /// <summary>
         /// 해당 Provider를 이용하여, 트리노드 Branch 혹은 Leaf 형성
@@ -87,7 +95,11 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             ///****************TreeContetnControlViewMdoel 생성 및 등록*****************************
             var groupList = _groupProvider.Select(group => new TreeContentControlViewModel(TreeManager.SetTreeGroupId(group.Id), group.NameArea, group.NameArea, EnumTreeType.BRANCH, group.Used, group.Visibility, Items.FirstOrDefault(), EnumDataType.Group, _eventAggregator) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{group.NameArea} {EnumDataType.Group.ToString()}" });
             ///**************************************************************************************
-            groupList.ToList().ForEach(item => AddTree(item));
+            groupList.ToList().ForEach(item => 
+            {
+                AddTree(item);
+                GroupSymbolTreeViewModel.AddTree(item);
+            });
 
 
             ///1. 그룹리스트에 존재하면 그룹을 등록한다. check
@@ -322,7 +334,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// </summary>
         /// <param name="node">등록할 Tree Node</param>
         /// <returns>boolean Type</returns>
-        protected override void RemoveTree(TreeContentControlViewModel node)
+        public override void RemoveTree(TreeContentControlViewModel node)
         {
             switch (node.DataType)
             {
@@ -564,6 +576,8 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         private ControllerProvider _controllerProvider;
         private SensorProvider _sensorProvider;
         private MapProvider _mapProvider;
+
+        public GroupSymbolTreeViewModel GroupSymbolTreeViewModel { get; }
         #endregion
 
     }

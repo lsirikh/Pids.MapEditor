@@ -15,28 +15,19 @@ using System.Threading.Tasks;
 
 namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 {
-    public sealed class CameraTreeViewModel
+    public sealed class GroupSymbolTreeViewModel
         : TreeBaseViewModel<SymbolContentControlViewModel>
-
-        , IHandle<DeviceTreeSelectedMessageModel>
-        //, IHandle<CameraTreeSelectedMessageModel>
-        , IHandle<GroupTreeSelectedMessageModel>
 
         , IHandle<SymbolContentUpdateMessageModel>
     {
+        
         #region - Ctors -
-        public CameraTreeViewModel(
-            CameraProvider provider
-            , MapProvider mapProvider
-            , IEventAggregator eventAggregator)
+        public GroupSymbolTreeViewModel()
         {
-            _provider = provider;
-            _mapProvider = mapProvider;
-            _eventAggregator = eventAggregator;
-        }
-
-        public CameraTreeViewModel()
-        {
+            _mapProvider = IoC.Get<MapProvider>();
+            _groupProvider = IoC.Get<GroupProvider>();
+            _groupSymbolProvider = IoC.Get<GroupSymbolProvider>();
+            _eventAggregator = IoC.Get<IEventAggregator>();
         }
         #endregion
         #region - Implementation of Interface -
@@ -51,7 +42,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
 
             ///Root가 null인경우 초기화
             ///V0 카메라 ID 규격
-            AddTree(new TreeContentControlViewModel($"R{0}", "전체 카메라", "카메라 전체 구성", EnumTreeType.ROOT, true, true, null, EnumDataType.CameraRoot, _eventAggregator, _mapProvider, _provider) { DisplayName = $"[{EnumTreeType.ROOT.ToString()}]{0} {EnumDataType.CameraRoot.ToString()}" });
+            AddTree(new TreeContentControlViewModel($"R{0}", "전체 그룹", "카메라 전체 구성", EnumTreeType.ROOT, true, true, null, EnumDataType.GroupSymbolRoot, _eventAggregator, _mapProvider) { DisplayName = $"[{EnumTreeType.ROOT.ToString()}]{0} {EnumDataType.GroupRoot.ToString()}" });
 
             ///Root는 Items의 첫 오브젝트를 할당
             var root = Items.FirstOrDefault();
@@ -67,12 +58,16 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
             base.SetTreeWithProvider();
 
             ///Provider를 이용한 카메라 등록
-            ///$"V{0}"
+            ///$"G{0}"
             ///기존의 등록하던 방식과 동일하게 등록
             ///****************TreeContetnControlViewMdoel 생성************************
-            var cameraList = _provider.Select(camera => new TreeContentControlViewModel(TreeManager.SetTreeCameraId(camera.Id), camera.NameArea, camera.NameDevice, EnumTreeType.LEAF, camera.Used, camera.Visibility, Items.FirstOrDefault(), EnumDataType.Camera, _eventAggregator) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{camera.Id} {EnumDataType.Camera.ToString()}" });
+            var groupList = _groupProvider.Select(group => new TreeContentControlViewModel(TreeManager.SetTreeGroupId(group.Id), group.NameArea, group.NameDevice, EnumTreeType.BRANCH, group.Used, group.Visibility, Items.FirstOrDefault(), EnumDataType.Group, _eventAggregator) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{group.Id} {EnumDataType.Group.ToString()}" });
 
-            cameraList.ToList().ForEach(item => AddTree(item));
+            groupList.ToList().ForEach(item => AddTree(item));
+
+            var groupSymbolList = _groupSymbolProvider.Select(gSymbol => new TreeContentControlViewModel(TreeManager.SetTreeGroupSymbolId(gSymbol.Id), gSymbol.NameArea, gSymbol.NameDevice, EnumTreeType.LEAF, gSymbol.Used, gSymbol.Visibility, Items.FirstOrDefault(), EnumDataType.GroupSymbol, _eventAggregator) { DisplayName = $"[{EnumTreeType.LEAF.ToString()}]{gSymbol.Id} {EnumDataType.GroupSymbol.ToString()}" });
+
+
         }
         /// <summary>
         /// 선택된 트리 노드를 기준으로 변경사항 업데이트
@@ -108,60 +103,43 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
                 Debug.WriteLine($"Raised Exception in UpdateTree : {ex.Message}");
                 return;
             }
-            
+
         }
-        
+
         /// <summary>
         /// 트리 노드를 선택할 경우, 해당 아이템의 세부내역(PropertySection)을
         /// 활성화 시키기 위한 이벤트 호출 메소드
         /// </summary>
         protected override void UpdateSelectedItem()
         {
-           
-            var viewModel = _provider.CollectionEntity
+            var viewModel = _groupSymbolProvider.CollectionEntity
             .Where(item => TreeManager.SetTreeCameraId(item.Id) == SelectedItem.Id)
             .SingleOrDefault();
 
             if (viewModel != null)
-                _eventAggregator.PublishOnUIThreadAsync(new OpenCameraPropertyMessageModel(viewModel));
+                _eventAggregator.PublishOnUIThreadAsync(new OpenGroupSymbolPropertyMessageModel(viewModel));
 
-            _eventAggregator.PublishOnUIThreadAsync(new CameraTreeSelectedMessageModel());
+            _eventAggregator.PublishOnUIThreadAsync(new GroupSymbolSelectedMessageModel());
         }
-
         #endregion
         #region - Binding Methods -
         #endregion
         #region - Processes -
         #endregion
         #region - IHanldes -
-        
         public Task HandleAsync(SymbolContentUpdateMessageModel message, CancellationToken cancellationToken)
         {
-            var viewModel = message?.ViewModel;
-            if (viewModel == null)
-                return Task.CompletedTask;
-
-            if (viewModel.GetType() == typeof(CameraContentControlViewModel))
-                UpdateTree(message?.ViewModel);
-            
+            //Add Function
             return Task.CompletedTask;
         }
 
-        public async Task HandleAsync(DeviceTreeSelectedMessageModel message, CancellationToken cancellationToken)
-        {
-            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
-        }
-
-        public async Task HandleAsync(GroupTreeSelectedMessageModel message, CancellationToken cancellationToken)
-        {
-            await Task.Run(() => TreeManager.SetTreeUnselected(Items));
-        }
+        private MapProvider _mapProvider;
         #endregion
         #region - Properties -
         #endregion
         #region - Attributes -
-        private CameraProvider _provider;
-        private MapProvider _mapProvider;
+        private GroupProvider _groupProvider;
+        private GroupSymbolProvider _groupSymbolProvider;
         #endregion
     }
 }

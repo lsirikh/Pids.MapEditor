@@ -29,6 +29,8 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="200" />
                 <RowDefinition Height="auto" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -144,14 +146,52 @@
                     <ContentControl cal:View.Model="{Binding GroupTreeViewModel}" />
                 </ScrollViewer>
             </GroupBox>
-            <GridSplitter Grid.Row="5"
+            <GridSplitter Grid.Row="4"
+                          Grid.Column="0"
+                          Height="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Bottom"
+                          Background="Gray" />
+            <GroupBox Header="GroupSymbols"
+                      Grid.Row="6"
+                      Grid.Column="0"
+                      Grid.RowSpan="2"
+                      Style="{StaticResource MaterialDesignCardGroupBox}"
+                      Margin="5"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      md:ColorZoneAssist.Mode="Dark">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="SquareWave"
+                                         VerticalAlignment="Center" />
+                            <TextBlock Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+
+                <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}"
+                              MaxHeight="500"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <!-- ContentControl-->
+                    <ContentControl cal:View.Model="{Binding GroupSymbolTreeViewModel}" />
+                </ScrollViewer>
+            </GroupBox>
+            <GridSplitter Grid.Row="6"
                           Grid.Column="0"
                           Height="2"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Bottom"
                           Background="Gray" />
             <GroupBox Header="Cameras"
-                      Grid.Row="6"
+                      Grid.Row="8"
                       Grid.Column="0"
                       Grid.RowSpan="2"
                       Style="{StaticResource MaterialDesignCardGroupBox}"

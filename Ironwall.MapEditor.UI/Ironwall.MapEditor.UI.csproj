@@ -228,6 +228,7 @@
     <Compile Include="DataProviders\ComboBoxSource\MapComboBox.cs" />
     <Compile Include="DataProviders\ControllerProvider.cs" />
     <Compile Include="DataProviders\GroupProvider.cs" />
+    <Compile Include="DataProviders\GroupSymbolProvider.cs" />
     <Compile Include="DataProviders\MapProvider.cs" />
     <Compile Include="DataProviders\SensorProvider.cs" />
     <Compile Include="DataProviders\SymbolCameraProvider.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="ViewModels\PopupDialogs\ProgressPopupDialogViewModel.cs" />
     <Compile Include="ViewModels\RegisteredItems\CameraTreeViewModel.cs" />
     <Compile Include="ViewModels\RegisteredItems\DeviceTreeViewModel.cs" />
+    <Compile Include="ViewModels\RegisteredItems\GroupSymbolTreeViewModel.cs" />
     <Compile Include="ViewModels\RegisteredItems\GroupTreeViewModel.cs" />
     <Compile Include="ViewModels\RegisteredItems\ITreeContentControlViewModel.cs" />
     <Compile Include="ViewModels\RegisteredItems\MapTreeViewModel.cs" />
@@ -417,6 +419,9 @@
     <Compile Include="Views\RegisteredItems\DeviceTreeView.xaml.cs">
       <DependentUpon>DeviceTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RegisteredItems\GroupSymbolTreeView.xaml.cs">
+      <DependentUpon>GroupSymbolTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RegisteredItems\GroupTreeView.xaml.cs">
       <DependentUpon>GroupTreeView.xaml</DependentUpon>
     </Compile>
@@ -482,8 +487,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -556,6 +559,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ContentControls\SensorContentControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RegisteredItems\GroupSymbolTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -38,16 +38,19 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             , ControllerProvider controllerProvider
             , SensorProvider sensorProvider
             , GroupProvider groupProvider
+            , GroupSymbolProvider groupSymbolProvider
             , CameraProvider cameraProvider
 
             , SymbolControllerProvider symbolControllerProvider
             , SymbolSensorProvider symbolSensorProvider
             //, SymbolGroupProvider symbolGroupProvider
+            //, SymbolGroupSymbolProvider symbolGroupSymbolProvider
             , SymbolCameraProvider symbolCameraProvider
 
             , MapTreeViewModel mapTreeViewModel
             , DeviceTreeViewModel deviceTreeViewModel
             , GroupTreeViewModel groupTreeViewModel
+            , GroupSymbolTreeViewModel groupSymbolTreeViewModel
             , CameraTreeViewModel cameraTreeViewModel
 
             , CanvasMapEntityProvider canvasMapEntityProvider
@@ -65,6 +68,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             _controllerProvider = controllerProvider;
             _sensorProvider = sensorProvider;
             _groupProvider = groupProvider;
+            _groupSymbolProvider = groupSymbolProvider;
             _cameraProvider = cameraProvider;
 
             _symbolControllerProvider = symbolControllerProvider;
@@ -76,6 +80,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
             _mapTreeViewModel = mapTreeViewModel;
             _deviceTreeViewModel = deviceTreeViewModel;
             _groupTreeViewModel = groupTreeViewModel;
+            _groupSymbolTreeViewModel = groupSymbolTreeViewModel;
             _cameraTreeViewModel = cameraTreeViewModel;
         }
         #endregion
@@ -111,6 +116,13 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                 if (GroupData != null)
                 {
                     var task = DoGroupTask();
+                    await task;
+                    Debug.WriteLine($"DoGroupTask : {task.Result}");
+                }
+
+                if(GroupSymbolData != null)
+                {
+                    var task = DoGroupSymbolTask();
                     await task;
                     Debug.WriteLine($"DoGroupTask : {task.Result}");
                 }
@@ -313,6 +325,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
 
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _deviceTreeViewModel);
+                        await _eventAggregator.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
                     }
                     return true;
                 }
@@ -340,7 +353,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     ///TreeNode 추가
                     treeParent.Children.Add(treeNode);
                 }));
-
+                
                 return true;
             });
 
@@ -425,6 +438,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
 
                         ///TreeContentControlViewModel 생성
                         await AddTreeNode(contentControlViewModel, _deviceTreeViewModel);
+                        await _eventAggregator.PublishOnUIThreadAsync(new SymbolContentUpdateMessageModel(contentControlViewModel));
                     }
                     return Task.CompletedTask;
                 }
@@ -559,6 +573,119 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                 ///5
                 await treeNode?.ActivateAsync();
                 ///6
+                
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    ///TreeNode 추가
+                    treeParent.Children.Add(treeNode);
+                }));
+                return true;
+            });
+        }
+
+        private Task<bool> DoGroupSymbolTask()
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var task = FileManager.ReadCSVFile<SymbolModel>(GroupData, _cancellationTokenSource.Token);
+                    var data = await task;
+                    if (data.Count() > 0)
+                    {
+                        var treeResult = await RemoveAllTree(_groupSymbolTreeViewModel);
+                        var contentResult = await RemoveCollectionEntity(_groupSymbolProvider);
+                        if (treeResult || contentResult)
+                            await InsertCollectionEntity(_groupSymbolProvider, data, _eventAggregator);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Raised Exception in DoGroupTask : {ex.Message}");
+                    return false;
+                }
+            });
+        }
+
+        private Task<bool> RemoveCollectionEntity(GroupSymbolProvider provider
+            //, GroupSymbolProvider symbolProvider
+            )
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    ///ContentControlProvider
+                    foreach (var item in provider.CollectionEntity)
+                    {
+                        if (item.IsActive)
+                            await item.DeactivateAsync(true);
+                    }
+                    provider.Clear();
+
+                    ///SymbolProvider
+                    /*foreach (var symbolItem in symbolProvider.CollectionEntity)
+                    {
+                        symbolItem.Deactivate();
+                    }
+                    symbolProvider.Clear();*/
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            });
+        }
+
+        private Task<bool> InsertCollectionEntity(GroupSymbolProvider provider, IEnumerable<IEntityModel> data, IEventAggregator eventAggregator, CancellationToken token = default)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    ///MapProvider를 삭제하기 위해서 삭제 권한을 갖는 구조를 단순화
+                    ///Add starting point and Remove starting point를 잡아야 한다.
+                    foreach (var item in data)
+                    {
+                        if (token.IsCancellationRequested)
+                            return false;
+
+                        var contentControlViewModel = new GroupContentControlViewModel(item, eventAggregator, _groupProvider, _mapProvider);
+                        await contentControlViewModel.ActivateAsync();
+                        provider.Add(contentControlViewModel);
+
+                        /*var symbol = new SymbolGroupViewModel(contentControlViewModel, eventAggregator);
+                        symbol.Activate();
+                        symbolProvider.Add(symbol);*/
+
+                        ///TreeContentControlViewModel 생성
+                        await AddTreeNode(contentControlViewModel, _groupSymbolTreeViewModel);
+                    }
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Raise Exception in InsertMapCollectionEntity : {ex.Message}");
+                    return false;
+                }
+            }, token);
+        }
+
+        private Task<bool> AddTreeNode(GroupContentControlViewModel contentControlViewModel, GroupSymbolTreeViewModel treeViewModel)
+        {
+            return Task.Run(async () =>
+            {
+                ///TreeContentControlViewModel 생성
+                var id = contentControlViewModel.Id;
+                var treeParent = treeViewModel.Items.FirstOrDefault();
+                var treeNode = new TreeContentControlViewModel(TreeManager.SetTreeGroupId(id), contentControlViewModel.NameArea, contentControlViewModel.NameArea, EnumTreeType.BRANCH, true, true, treeParent, EnumDataType.Group, _eventAggregator, _mapProvider, _groupProvider, _controllerProvider, _sensorProvider) { DisplayName = $"[{EnumTreeType.BRANCH.ToString()}]{id} {EnumDataType.Group.ToString()}" };
+                ///5
+                await treeNode?.ActivateAsync();
+                ///6
+
                 DispatcherService.Invoke((System.Action)(() =>
                 {
                     ///TreeNode 추가
@@ -710,6 +837,12 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                     var treeRoot = vm.Items.FirstOrDefault();
                     TreeManager.SetTreeClear(treeRoot.Children);
                 }
+                else if(viewModel.GetType() == typeof(GroupSymbolTreeViewModel))
+                {
+                    var vm = viewModel as GroupTreeViewModel;
+                    var treeRoot = vm.Items.FirstOrDefault();
+                    TreeManager.SetTreeClear(treeRoot.Children);
+                }
                 else if (viewModel.GetType() == typeof(CameraTreeViewModel))
                 {
                     var vm = viewModel as CameraTreeViewModel;
@@ -791,6 +924,11 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
                             GroupData = Path.GetFullPath(item);
                             NotifyOfPropertyChange(() => GroupData);
                         }
+                        else if (item.Contains("GroupSymbol_"))
+                        {
+                            GroupData = Path.GetFullPath(item);
+                            NotifyOfPropertyChange(() => GroupData);
+                        }
                         else if (item.Contains("Camera_"))
                         {
                             CameraData = Path.GetFullPath(item);
@@ -812,6 +950,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         public string ControllerData { get; set; }
         public string SensorData { get; set; }
         public string GroupData { get; set; }
+        public string GroupSymbolData { get; set; }
         public string CameraData { get; set; }
         #endregion
         #region - Attributes -
@@ -819,6 +958,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         private ControllerProvider _controllerProvider;
         private SensorProvider _sensorProvider;
         private GroupProvider _groupProvider;
+        private GroupSymbolProvider _groupSymbolProvider;
         private CameraProvider _cameraProvider;
 
         private SymbolControllerProvider _symbolControllerProvider;
@@ -829,6 +969,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.Panels
         private MapTreeViewModel _mapTreeViewModel;
         private DeviceTreeViewModel _deviceTreeViewModel;
         private GroupTreeViewModel _groupTreeViewModel;
+        private GroupSymbolTreeViewModel _groupSymbolTreeViewModel;
         private CameraTreeViewModel _cameraTreeViewModel;
         #endregion
     }

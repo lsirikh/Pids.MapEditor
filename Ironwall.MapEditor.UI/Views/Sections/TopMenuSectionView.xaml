@@ -7,7 +7,7 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="50" d:DesignWidth="1200">
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="600"/>
@@ -89,6 +89,20 @@
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem ToolTip="그룹"
+                      IsEnabled="{Binding DrawingType
+                , UpdateSourceTrigger=PropertyChanged
+                , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='GroupLabel'}">
+                <MenuItem.Header>
+                    <StackPanel Margin="5 2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <md:PackIcon Kind="Label"
+                                     Width="30"
+                                     Height="30" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem ToolTip="그룹라인"
                       IsEnabled="{Binding DrawingType
                 , UpdateSourceTrigger=PropertyChanged
                 , Converter={StaticResource EnumDrawingTypeToBooleanConverter}, ConverterParameter='Group'}">

@@ -194,8 +194,9 @@
                                 Grid.Column="0"
                                 Grid.ColumnSpan="4"
                                 Margin="10 0"
-                                Padding="5"
-                                FontSize="15"
+                                BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                                Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                                VerticalAlignment="Center"
                                 x:Name="ClickToLoadData"
                                 Content="열기" />
                         <!--

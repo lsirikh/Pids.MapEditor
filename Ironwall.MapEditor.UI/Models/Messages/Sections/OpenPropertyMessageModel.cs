@@ -7,53 +7,65 @@ using System.Threading.Tasks;
 
 namespace Ironwall.MapEditor.UI.Models.Messages.Sections
 {
-    public class OpenMapPropertyMessageModel
+    public abstract class OpenPropertyMessageModel
     {
-        public OpenMapPropertyMessageModel(Screen vm)
+        public OpenPropertyMessageModel(Screen vm)
         {
             ViewModel = vm;
         }
 
         public Screen ViewModel { get; }
+    }
+
+    public class OpenMapPropertyMessageModel
+         : OpenPropertyMessageModel
+    {
+        public OpenMapPropertyMessageModel(Screen vm) : base(vm)
+        {
+        }
     }
 
     public class OpenControllerPropertyMessageModel
+         : OpenPropertyMessageModel
     {
-        public OpenControllerPropertyMessageModel(Screen vm)
+        public OpenControllerPropertyMessageModel(Screen vm) : base(vm)
         {
-            ViewModel = vm;
         }
-
-        public Screen ViewModel { get; }
     }
 
     public class OpenSensorPropertyMessageModel
+         : OpenPropertyMessageModel
     {
-        public OpenSensorPropertyMessageModel(Screen vm)
+        public OpenSensorPropertyMessageModel(Screen vm) : base(vm)
         {
-            ViewModel = vm;
         }
-
-        public Screen ViewModel { get; }
     }
 
     public class OpenGroupPropertyMessageModel
+         : OpenPropertyMessageModel
     {
-        public OpenGroupPropertyMessageModel(Screen vm)
+        public OpenGroupPropertyMessageModel(Screen vm) : base(vm)
         {
-            ViewModel = vm;
         }
+    }
 
-        public Screen ViewModel { get; }
+    public class OpenGroupSymbolPropertyMessageModel
+        : OpenPropertyMessageModel
+    {
+        public OpenGroupSymbolPropertyMessageModel(Screen vm) : base(vm)
+        {
+        }
     }
 
     public class OpenCameraPropertyMessageModel
+        : OpenPropertyMessageModel
     {
-        public OpenCameraPropertyMessageModel(Screen vm)
+        public OpenCameraPropertyMessageModel(Screen vm) : base(vm)
         {
-            ViewModel = vm;
         }
-
-        public Screen ViewModel { get; }
     }
+
+
+
+    
 }

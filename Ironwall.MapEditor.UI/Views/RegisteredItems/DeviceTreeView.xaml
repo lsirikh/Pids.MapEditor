@@ -28,7 +28,6 @@
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
                   FontSize="15"
-                  x:Name="TreeAlpha"
                   ItemsSource="{Binding Items}">
             <i:Interaction.Behaviors>
                 <behavior:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -46,6 +45,8 @@
                             Value="Center" />
                     <Setter Property="Foreground"
                             Value="White" />
+                    <Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Style>
             </TreeView.ItemContainerStyle>
 

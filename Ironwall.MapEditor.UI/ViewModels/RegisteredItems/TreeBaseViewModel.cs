@@ -67,7 +67,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// <param name="parentNode">Node의 부모</param>
         /// <param name="node">추가할 Node</param>
         /// <returns>boolean type</returns>
-        protected virtual async void AddTree(TreeContentControlViewModel node)
+        public virtual async void AddTree(TreeContentControlViewModel node)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Ironwall.MapEditor.UI.ViewModels.RegisteredItems
         /// </summary>
         /// <param name="node">삭제할 Node</param>
         /// <returns>boolean type</returns>
-        protected virtual async void RemoveTree(TreeContentControlViewModel node)
+        public virtual async void RemoveTree(TreeContentControlViewModel node)
         {
             try
             {
